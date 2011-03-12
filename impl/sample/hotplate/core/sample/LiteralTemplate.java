@@ -5,9 +5,9 @@ import sample.hotplate.core.impl.TemplateBase;
 
 public class LiteralTemplate extends TemplateBase<Object, SimpleTemplate> implements SimpleTemplate {
 
-	private String token;
-	public LiteralTemplate(String token) {
-		this.token = token;
+	private String text;
+	public LiteralTemplate(String text) {
+		this.text = text;
 	}
 	@Override
 	public boolean isReducible() {
@@ -15,7 +15,7 @@ public class LiteralTemplate extends TemplateBase<Object, SimpleTemplate> implem
 	}
 	@Override
 	public String getString() {
-		return token;
+		return text;
 	}
 	@Override
 	public SimpleTemplate apply(Context<Object, SimpleTemplate> context) {

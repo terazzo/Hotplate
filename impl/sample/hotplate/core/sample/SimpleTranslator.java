@@ -18,15 +18,36 @@ public class SimpleTranslator implements Translator<String, Object, SimpleTempla
 	public String fromTemplate(SimpleTemplate template) {
 		return template.getString();
 	}
-
+	enum Mode {
+		TEXT,
+		IN_BRACE
+	}
 	private List<SimpleTemplate> parse(String rawObject) {
 		List<SimpleTemplate> elements = new ArrayList<SimpleTemplate>();
-		StringTokenizer stringTokenizer = new StringTokenizer(rawObject, "$");
-		boolean inExpression = false;
+		StringTokenizer stringTokenizer = new StringTokenizer(rawObject, "{}", true);
+		Mode mode = Mode.TEXT;
 		while (stringTokenizer.hasMoreTokens()) {
 			String token = stringTokenizer.nextToken();
-			elements.add(inExpression ? new SimpleProcessor(token) : new LiteralTemplate(token));
-			inExpression = !inExpression;
+			switch (mode) {
+			case TEXT:
+				if (token.equals("{")) {
+					mode = Mode.IN_BRACE;
+				} else if (token.equals("}")) {
+					throw new IllegalArgumentException("Illegal format string. Unexpected '}' occured." + rawObject);
+				} else {
+					elements.add(new LiteralTemplate(token));
+				}
+				break;
+			case IN_BRACE:
+				if (token.equals("{")) {
+					throw new IllegalArgumentException("Illegal format string. Unexpected '{' occured." + rawObject);
+				} else if (token.equals("}")) {
+					mode = Mode.TEXT;
+				} else {
+					elements.add(new SimpleProcessor(token));				
+				}
+				break;
+			}
 		}
 		return elements;
 	}

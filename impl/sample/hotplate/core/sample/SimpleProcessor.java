@@ -15,10 +15,14 @@ public class SimpleProcessor extends TemplateBase<Object, SimpleTemplate> implem
 	@Override
 	public SimpleTemplate apply(Context<Object, SimpleTemplate> context) {
 		Associable<Object, SimpleTemplate> associable = context.get(varname);
-		if (associable != null) {
+		if (associable == null) {
+			return this;
+		}
+		if (associable.isTemplate()) {
+			return associable.asTemplate().apply(context);
+		} else {
 			return new LiteralTemplate(associable.asValue().value().toString());
 		}
-		return this;
 	}
 
 	@Override

@@ -5,7 +5,7 @@ import java.util.List;
 
 import sample.hotplate.core.Template;
 
-public interface SimpleTemplate extends Template<Object, SimpleTemplate>{
+public interface SimpleTemplate extends Template<Object, SimpleTemplate> {
 	String getString();
 	public class Utils {
 		public static List<SimpleTemplate> asList(SimpleTemplate template) {

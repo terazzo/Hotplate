@@ -4,9 +4,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import sample.hotplate.core.Context;
-import sample.hotplate.core.impl.TemplateBase;
 
-public class SimpleContainer extends TemplateBase<Object, SimpleTemplate> implements SimpleTemplate {
+public class SimpleContainer implements SimpleTemplate {
 	private final List<SimpleTemplate> elements;
 	private final boolean isReducible;
 	public SimpleContainer(List<SimpleTemplate> elements) {
@@ -45,4 +44,16 @@ public class SimpleContainer extends TemplateBase<Object, SimpleTemplate> implem
 		return sb.toString();
 	}
 
+	
+	@Override
+	public int hashCode() {
+		return elements.hashCode();
+	}
+	@Override
+	public boolean equals(Object obj) {
+		if (obj == null || !(obj instanceof SimpleContainer)) {
+			return false;
+		}
+		return elements.equals(((SimpleContainer) obj).elements);
+	}
 }

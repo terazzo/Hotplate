@@ -3,20 +3,19 @@ package sample.hotplate.core.impl;
 import java.util.HashMap;
 import java.util.Map;
 
-import sample.hotplate.core.Associable;
 import sample.hotplate.core.Context;
+import sample.hotplate.core.Symbol;
 import sample.hotplate.core.Template;
 
 public class ContextImpl<R, T extends Template<R, T>> implements Context<R, T> {
-	private Map<String, Associable<R, T>> scope = new HashMap<String, Associable<R,T>>();
+	private Map<Symbol, T> scope = new HashMap<Symbol, T>();
 	
-	@Override
-	public void put(String name, Associable<R, T> value) {
-		scope.put(name, value);
+	public void put(Symbol symbol, T value) {
+		scope.put(symbol, value);
 	}
 	@Override
-	public Associable<R, T> get(String name) {
-		return scope.get(name);
+	public T get(Symbol symbol) {
+		return scope.get(symbol);
 	}
 
 }

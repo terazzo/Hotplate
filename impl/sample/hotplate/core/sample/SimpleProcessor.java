@@ -1,28 +1,23 @@
 package sample.hotplate.core.sample;
 
-import sample.hotplate.core.Associable;
 import sample.hotplate.core.Context;
-import sample.hotplate.core.impl.TemplateBase;
+import sample.hotplate.core.Symbol;
 
-public class SimpleProcessor extends TemplateBase<Object, SimpleTemplate> implements SimpleTemplate{
+public class SimpleProcessor implements SimpleTemplate {
 
-	private final String varname;
+	private final Symbol symbol;
 
-	public SimpleProcessor(String varname) {
-		this.varname = varname;
+	public SimpleProcessor(Symbol symbol) {
+		this.symbol = symbol;
 	}
 
 	@Override
 	public SimpleTemplate apply(Context<Object, SimpleTemplate> context) {
-		Associable<Object, SimpleTemplate> associable = context.get(varname);
-		if (associable == null) {
+		SimpleTemplate value = context.get(symbol);
+		if (value == null) {
 			return this;
 		}
-		if (associable.isTemplate()) {
-			return associable.asTemplate().apply(context);
-		} else {
-			return new LiteralTemplate(associable.asValue().value().toString());
-		}
+		return value;
 	}
 
 	@Override
@@ -31,7 +26,20 @@ public class SimpleProcessor extends TemplateBase<Object, SimpleTemplate> implem
 	}
 	@Override
 	public String getString() {
-		throw new IllegalStateException("Unbound variable:" + varname);
+		throw new IllegalStateException("Unbound variable:" + symbol);
+	}
+
+	@Override
+	public int hashCode() {
+		return symbol.hashCode();
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (obj == null || !(obj instanceof SimpleProcessor)) {
+			return false;
+		}
+		return symbol.equals(((SimpleProcessor) obj).symbol);
 	}
 
 }

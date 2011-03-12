@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.StringTokenizer;
 
+import sample.hotplate.core.Symbol;
 import sample.hotplate.core.Translator;
 
 
@@ -35,7 +36,7 @@ public class SimpleTranslator implements Translator<String, Object, SimpleTempla
 				} else if (token.equals("}")) {
 					throw new IllegalArgumentException("Illegal format string. Unexpected '}' occured." + rawObject);
 				} else {
-					elements.add(new LiteralTemplate(token));
+					elements.add(new SimpleLiteral(token));
 				}
 				break;
 			case IN_BRACE:
@@ -44,7 +45,7 @@ public class SimpleTranslator implements Translator<String, Object, SimpleTempla
 				} else if (token.equals("}")) {
 					mode = Mode.TEXT;
 				} else {
-					elements.add(new SimpleProcessor(token));				
+					elements.add(new SimpleProcessor(Symbol.of(token)));				
 				}
 				break;
 			}

@@ -2,6 +2,7 @@ package sample.hotplate.core.sample;
 
 import sample.hotplate.core.Context;
 import sample.hotplate.core.Symbol;
+import sample.hotplate.core.TemplatePair;
 
 public class SimpleProcessor implements SimpleTemplate {
 
@@ -12,12 +13,12 @@ public class SimpleProcessor implements SimpleTemplate {
 	}
 
 	@Override
-	public SimpleTemplate apply(Context<Object, SimpleTemplate> context) {
+	public TemplatePair<Object, SimpleTemplate> apply(Context<Object, SimpleTemplate> context) {
 		SimpleTemplate value = context.get(symbol);
 		if (value == null) {
-			return this;
+			return new SimpleTemplatePair(this, context);
 		}
-		return value;
+		return new SimpleTemplatePair(value, context);
 	}
 
 	@Override
@@ -41,5 +42,10 @@ public class SimpleProcessor implements SimpleTemplate {
 		}
 		return symbol.equals(((SimpleProcessor) obj).symbol);
 	}
+
+    @Override
+    public boolean isPrototype() {
+        return false;
+    }
 
 }

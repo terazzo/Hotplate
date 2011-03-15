@@ -8,11 +8,15 @@ public class SimpleLiteral extends LiteralBase<Object, SimpleTemplate> implement
 		super(value);
 	}
 	@Override
-	protected SimpleTemplate getConcrete() {
+    protected SimpleTemplate getConcrete() {
 		return this;
 	}
 	@Override
 	public String getString() {
 		return value().toString();
 	}
+    @Override
+    public boolean isPrototype() {
+        return false;
+    }
 }

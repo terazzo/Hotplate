@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import sample.hotplate.core.Context;
+import sample.hotplate.core.TemplatePair;
 
 public class SimpleContainer implements SimpleTemplate {
 	private final List<SimpleTemplate> elements;
@@ -20,15 +21,15 @@ public class SimpleContainer implements SimpleTemplate {
 	}
 
 	@Override
-	public SimpleContainer apply(Context<Object, SimpleTemplate> context) {
+	public TemplatePair<Object, SimpleTemplate> apply(Context<Object, SimpleTemplate> context) {
 		if (!isReducible()) {
-			return this;
+			return new SimpleTemplatePair(this, context);
 		}
 		List<SimpleTemplate> newElements = new ArrayList<SimpleTemplate>();
 		for (SimpleTemplate element : elements) {
-			newElements.add(element.apply(context));
+			newElements.add(element.apply(context).template());
 		}
-		return new SimpleContainer(newElements);
+		return new SimpleTemplatePair(new SimpleContainer(newElements), context);
 	}
 
 	@Override
@@ -43,6 +44,10 @@ public class SimpleContainer implements SimpleTemplate {
 		}
 		return sb.toString();
 	}
+    @Override
+    public boolean isPrototype() {
+        return false;
+    }
 
 	
 	@Override

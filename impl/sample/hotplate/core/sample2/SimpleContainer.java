@@ -1,59 +1,35 @@
 package sample.hotplate.core.sample2;
 
-import java.util.ArrayList;
 import java.util.List;
 
-import sample.hotplate.core.Context;
+import sample.hotplate.core.impl.ContainerBase;
 
-public class SimpleContainer implements SimpleTemplate {
-	private final List<SimpleTemplate> elements;
-	private final boolean isReducible;
+public class SimpleContainer extends ContainerBase<Object, SimpleTemplate> implements SimpleTemplate {
 	public SimpleContainer(List<SimpleTemplate> elements) {
-		this.elements = elements;
-		for (SimpleTemplate element : elements) {
-			if (element.isReducible()) {
-				this.isReducible = true;
-				return;
-			}
-		}
-		isReducible = false;
+	    super(elements);
 	}
 
-	@Override
-	public SimpleContainer apply(Context<Object, SimpleTemplate> context) {
-		if (!isReducible()) {
-			return this;
-		}
-		List<SimpleTemplate> newElements = new ArrayList<SimpleTemplate>();
-		for (SimpleTemplate element : elements) {
-			newElements.add(element.apply(context));
-		}
-		return new SimpleContainer(newElements);
+    @Override
+    protected SimpleTemplate getConcrete() {
+        return this;
+    }
+
+    @Override
+    protected SimpleTemplate getConcrete(List<SimpleTemplate> newElements) {
+        return new SimpleContainer(newElements);
+    }
+
+    public String getString() {
+        StringBuilder sb = new StringBuilder();
+        for (SimpleTemplate element : elements) {
+            sb.append(element.getString());
+        }
+        return sb.toString();
+    }
+
+	public String toString() {
+	    return elements.toString();
 	}
 
-	@Override
-	public boolean isReducible() {
-		return isReducible;
-	}
 
-	public String getString() {
-		StringBuilder sb = new StringBuilder();
-		for (SimpleTemplate element : elements) {
-			sb.append(element.getString());
-		}
-		return sb.toString();
-	}
-
-	
-	@Override
-	public int hashCode() {
-		return elements.hashCode();
-	}
-	@Override
-	public boolean equals(Object obj) {
-		if (obj == null || !(obj instanceof SimpleContainer)) {
-			return false;
-		}
-		return elements.equals(((SimpleContainer) obj).elements);
-	}
 }

@@ -1,26 +1,26 @@
 package sample.hotplate.core.sample2.processors;
 
 import sample.hotplate.core.Context;
+import sample.hotplate.core.Symbol;
+import sample.hotplate.core.processor.DefineProcessorBase;
 import sample.hotplate.core.sample2.SimpleTemplate;
 
-public class SimpleDefineProcessor implements SimpleTemplate {
-
-    @Override
-    public SimpleTemplate apply(Context<Object, SimpleTemplate> context) {
-        // TODO Auto-generated method stub
-        return null;
+public class SimpleDefineProcessor extends DefineProcessorBase<Object, SimpleTemplate> implements SimpleTemplate {
+    public SimpleDefineProcessor(Context<Object, SimpleTemplate> lexicalScope, Symbol symbol, SimpleTemplate value) {
+        super(lexicalScope, symbol, value);
     }
 
     @Override
-    public boolean isReducible() {
-        // TODO Auto-generated method stub
-        return false;
+    protected SimpleTemplate getConcrete() {
+        return this;
     }
 
     @Override
     public String getString() {
-        // TODO Auto-generated method stub
-        return null;
+        throw new IllegalStateException("Unuserd definition:" + symbol);
+    }
+    public String toString() {
+        return String.format("{define name=\"%s\" value=%s/}", symbol,value.toString());
     }
 
 }

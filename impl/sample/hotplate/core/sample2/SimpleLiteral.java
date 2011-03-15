@@ -7,12 +7,15 @@ public class SimpleLiteral extends LiteralBase<Object, SimpleTemplate> implement
 	public SimpleLiteral(Object value) {
 		super(value);
 	}
-	@Override
-	protected SimpleTemplate getConcrete() {
-		return this;
-	}
+    @Override
+    protected SimpleTemplate getConcrete() {
+        return this;
+    }
 	@Override
 	public String getString() {
 		return value().toString();
 	}
+    public String toString() {
+        return String.format("'%s'", value().toString());
+    }
 }

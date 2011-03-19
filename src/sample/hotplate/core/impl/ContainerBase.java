@@ -7,6 +7,7 @@ import java.util.List;
 import sample.hotplate.core.Context;
 import sample.hotplate.core.Template;
 import sample.hotplate.core.TemplatePair;
+import sample.hotplate.core.TemplateWalker;
 import sample.hotplate.core.util.ContextUtils;
 import sample.hotplate.core.util.TemplatePairUtils;
 
@@ -45,4 +46,12 @@ public abstract class ContainerBase<V, T extends Template<V, T>> implements Temp
     }
     protected abstract T concreteThis();
     protected abstract T newInstance(List<T> newElements);
+
+    @Override
+    public void traverse(TemplateWalker<V, T> walker) {
+        walker.process(this);
+        for (T element : elements) {
+            element.traverse(walker);
+        }
+    }
 }

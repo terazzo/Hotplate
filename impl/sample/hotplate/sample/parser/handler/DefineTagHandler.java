@@ -1,15 +1,15 @@
-package sample.hotplate.core.sample2.parser.handler;
+package sample.hotplate.sample.parser.handler;
 
 import java.util.List;
 
 import sample.hotplate.core.Symbol;
-import sample.hotplate.core.sample2.SimpleContainer;
-import sample.hotplate.core.sample2.SimpleLiteral;
-import sample.hotplate.core.sample2.SimpleReference;
-import sample.hotplate.core.sample2.SimpleTemplate;
-import sample.hotplate.core.sample2.parser.Attribute;
-import sample.hotplate.core.sample2.parser.TagHandler;
-import sample.hotplate.core.sample2.processor.SimpleDefineProcessor;
+import sample.hotplate.sample.SimpleContainer;
+import sample.hotplate.sample.SimpleLiteral;
+import sample.hotplate.sample.SimpleReference;
+import sample.hotplate.sample.SimpleTemplate;
+import sample.hotplate.sample.parser.Attribute;
+import sample.hotplate.sample.parser.TagHandler;
+import sample.hotplate.sample.processor.SimpleDefineProcessor;
 
 public class DefineTagHandler implements TagHandler<Object, SimpleTemplate>{
     @Override

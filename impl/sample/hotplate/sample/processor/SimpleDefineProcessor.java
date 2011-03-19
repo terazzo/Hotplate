@@ -1,10 +1,10 @@
-package sample.hotplate.core.sample2.processor;
+package sample.hotplate.sample.processor;
 
 import sample.hotplate.core.Context;
 import sample.hotplate.core.Symbol;
 import sample.hotplate.core.impl.processor.DefineProcessorBase;
-import sample.hotplate.core.sample2.SimpleNop;
-import sample.hotplate.core.sample2.SimpleTemplate;
+import sample.hotplate.sample.SimpleNop;
+import sample.hotplate.sample.SimpleTemplate;
 
 public class SimpleDefineProcessor extends DefineProcessorBase<Object, SimpleTemplate> implements SimpleTemplate {
     public SimpleDefineProcessor(Context<Object, SimpleTemplate> lexicalScope, Symbol symbol, SimpleTemplate value) {
@@ -17,10 +17,6 @@ public class SimpleDefineProcessor extends DefineProcessorBase<Object, SimpleTem
         return new SimpleDefineProcessor(lexicalScope, symbol, value);
     }
 
-    @Override
-    public String getString() {
-        throw new IllegalStateException("Unused definition:" + symbol);
-    }
     public String toString() {
         return String.format("{define name=\"%s\" value=%s/}", symbol, source);
     }

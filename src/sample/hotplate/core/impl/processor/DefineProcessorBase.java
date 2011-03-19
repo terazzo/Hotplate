@@ -4,6 +4,7 @@ import sample.hotplate.core.Context;
 import sample.hotplate.core.Symbol;
 import sample.hotplate.core.Template;
 import sample.hotplate.core.TemplatePair;
+import sample.hotplate.core.TemplateWalker;
 import sample.hotplate.core.impl.ProcessorBase;
 import sample.hotplate.core.util.ContextUtils;
 import sample.hotplate.core.util.TemplatePairUtils;
@@ -32,4 +33,9 @@ public abstract class DefineProcessorBase<V, T extends Template<V,T>> extends Pr
     }
     protected abstract T getNop();
     protected abstract T newInstance(Context<V, T> lexicalScope, Symbol symbol, T value);
+
+    @Override
+    public void traverse(TemplateWalker<V, T> walker) {
+        walker.process(this);
+    }
 }

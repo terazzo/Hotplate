@@ -1,9 +1,9 @@
-package sample.hotplate.core.sample2.parser;
+package sample.hotplate.sample.parser;
 
-import static sample.hotplate.core.sample2.parser.ParserFactory.LITERAL_NAME;
-import static sample.hotplate.core.sample2.parser.ParserFactory.endBrace;
-import static sample.hotplate.core.sample2.parser.ParserFactory.operators;
-import static sample.hotplate.core.sample2.parser.ParserFactory.startBrace;
+import static sample.hotplate.sample.parser.ParserFactory.LITERAL_NAME;
+import static sample.hotplate.sample.parser.ParserFactory.endBrace;
+import static sample.hotplate.sample.parser.ParserFactory.operators;
+import static sample.hotplate.sample.parser.ParserFactory.startBrace;
 
 import java.util.List;
 
@@ -15,8 +15,8 @@ import org.codehaus.jparsec.functors.Map;
 import org.codehaus.jparsec.functors.Map2;
 import org.codehaus.jparsec.functors.Map3;
 
-import sample.hotplate.core.sample2.SimpleLiteral;
-import sample.hotplate.core.sample2.SimpleTemplate;
+import sample.hotplate.sample.SimpleLiteral;
+import sample.hotplate.sample.SimpleTemplate;
 
 
 

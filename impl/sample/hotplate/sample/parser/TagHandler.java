@@ -1,4 +1,4 @@
-package sample.hotplate.core.sample2.parser;
+package sample.hotplate.sample.parser;
 
 import java.util.List;
 

@@ -1,11 +1,14 @@
-package sample.hotplate.core.sample2;
+package sample.hotplate.sample;
 
 import static org.junit.Assert.assertEquals;
 
 import org.junit.Test;
 
+import sample.hotplate.core.Context;
 import sample.hotplate.core.Symbol;
-import sample.hotplate.core.impl.ContextImpl;
+import sample.hotplate.core.util.ContextBuilder;
+import sample.hotplate.sample.SimpleTemplate;
+import sample.hotplate.sample.SimpleTranslator;
 
 public class SimpleCompilerTest {
     @Test
@@ -17,16 +20,20 @@ public class SimpleCompilerTest {
                     "{define name=yourname value=customerName /}" +
                 "{/insert}"
                     );
-        ContextImpl<Object, SimpleTemplate> context1 = new ContextImpl<Object, SimpleTemplate>()
-        .put(Symbol.of("aisatsu"), translator.toTemplate("こんにちは、{insert value=yourname/}様。"));
-        ContextImpl<Object, SimpleTemplate> context2 = new ContextImpl<Object, SimpleTemplate>()
-        .put(Symbol.of("customerName"), translator.toTemplate("板東トン吉"));
+        Context<Object, SimpleTemplate> context1 =
+            new ContextBuilder<Object, SimpleTemplate>()
+            .put(Symbol.of("aisatsu"), translator.toTemplate("こんにちは、{insert value=yourname/}様。"))
+            .context();
+        Context<Object, SimpleTemplate> context2 =
+            new ContextBuilder<Object, SimpleTemplate>()
+            .put(Symbol.of("customerName"), translator.toTemplate("板東トン吉"))
+            .context();
         SimpleTemplate applied = template.apply(context1).template();
         SimpleTemplate applied2 = applied.apply(context2).template();
 
         System.out.println("applied = " + applied);
         System.out.println("applied2 = " + applied2);
-        String result = applied2.getString();
+        String result = translator.fromTemplate(applied2);
         System.out.println("result = " + result);
         assertEquals("こんにちは、板東トン吉様。", result);
     }
@@ -42,18 +49,22 @@ public class SimpleCompilerTest {
                     "{define name=raitenbi value=day /}" +
                 "{/insert}"
                     );
-        ContextImpl<Object, SimpleTemplate> context1 = new ContextImpl<Object, SimpleTemplate>()
-        .put(Symbol.of("aisatsu"), translator.toTemplate("こんにちは、{insert value=yourname/}様。"))
-        .put(Symbol.of("raitenonrei"), translator.toTemplate("{insert value=raitenbi/}にはご来店いただき、\nまことにありがとうございます。"));
-        ContextImpl<Object, SimpleTemplate> context2 = new ContextImpl<Object, SimpleTemplate>()
-        .put(Symbol.of("customerName"), translator.toTemplate("板東トン吉"))
-        .put(Symbol.of("day"), translator.toTemplate("1月21日"));
+        Context<Object, SimpleTemplate> context1 =
+            new ContextBuilder<Object, SimpleTemplate>()
+            .put(Symbol.of("aisatsu"), translator.toTemplate("こんにちは、{insert value=yourname/}様。"))
+            .put(Symbol.of("raitenonrei"), translator.toTemplate("{insert value=raitenbi/}にはご来店いただき、\nまことにありがとうございます。"))
+            .context();
+        Context<Object, SimpleTemplate> context2 =
+            new ContextBuilder<Object, SimpleTemplate>()
+            .put(Symbol.of("customerName"), translator.toTemplate("板東トン吉"))
+            .put(Symbol.of("day"), translator.toTemplate("1月21日"))
+            .context();
         SimpleTemplate applied = template.apply(context1).template();
         SimpleTemplate applied2 = applied.apply(context2).template();
 
         System.out.println("applied = " + applied);
         System.out.println("applied2 = " + applied2);
-		String result = applied2.getString();
+		String result = translator.fromTemplate(applied2);
 		System.out.println("result = " + result);
 		assertEquals("こんにちは、板東トン吉様。1月21日にはご来店いただき、\nまことにありがとうございます。", result);
 	}
@@ -70,21 +81,25 @@ public class SimpleCompilerTest {
                     "{define name=header value=aHeader /}" +
                 "{/insert}"
                     );
-        ContextImpl<Object, SimpleTemplate> context1 = new ContextImpl<Object, SimpleTemplate>()
-        .put(Symbol.of("raitenonrei"), translator.toTemplate(
-                "{insert value=header}{define name=title value=\"ヘッダ\"/}{/insert}\n{insert value=raitenbi/}にはご来店いただき、\nまことにありがとうございます。"));
+        Context<Object, SimpleTemplate> context1 =
+            new ContextBuilder<Object, SimpleTemplate>()
+            .put(Symbol.of("raitenonrei"), translator.toTemplate(
+                "{insert value=header}{define name=title value=\"ヘッダ\"/}{/insert}\n{insert value=raitenbi/}にはご来店いただき、\nまことにありがとうございます。"))
+            .context();
         SimpleTemplate applied = template.apply(context1).template();
         System.out.println("-------");
         System.out.println("applied = " + applied);
         System.out.println("-------");
 
-        ContextImpl<Object, SimpleTemplate> context2 = new ContextImpl<Object, SimpleTemplate>()
-        .put(Symbol.of("customerName"), translator.toTemplate("板東トン吉"))
-        .put(Symbol.of("day"), translator.toTemplate("1月21日"));
+        Context<Object, SimpleTemplate> context2 =
+            new ContextBuilder<Object, SimpleTemplate>()
+            .put(Symbol.of("customerName"), translator.toTemplate("板東トン吉"))
+            .put(Symbol.of("day"), translator.toTemplate("1月21日"))
+            .context();
         SimpleTemplate applied2 = applied.apply(context2).template();
 
         System.out.println("applied2 = " + applied2);
-        String result = applied2.getString();
+        String result = translator.fromTemplate(applied2);
         System.out.println("result = " + result);
         assertEquals("これはヘッダです\n1月21日にはご来店いただき、\nまことにありがとうございます。", result);
     }
@@ -102,15 +117,17 @@ public class SimpleCompilerTest {
                "Copyright(c) {insert value=copyrightOwner/} {insert value=copyrightYear/} All Rights Reserved." + 
                "</body>\n" +
                "</html>");
-        ContextImpl<Object, SimpleTemplate> globalSettings =
-        new ContextImpl<Object, SimpleTemplate>()
-        .put(Symbol.of("copyrightOwner"), translator.toTemplate("terazzo"))
-        .put(Symbol.of("copyrightYear"), translator.toTemplate("2011"));
+        Context<Object, SimpleTemplate> globalSettings =
+            new ContextBuilder<Object, SimpleTemplate>()
+            .put(Symbol.of("copyrightOwner"), translator.toTemplate("terazzo"))
+            .put(Symbol.of("copyrightYear"), translator.toTemplate("2011"))
+            .context();
         layout = layout.apply(globalSettings).template();
 
-       ContextImpl<Object, SimpleTemplate> templates =
-           new ContextImpl<Object, SimpleTemplate>().
-           put(Symbol.of("layout"), layout);
+        Context<Object, SimpleTemplate> templates =
+            new ContextBuilder<Object, SimpleTemplate>()
+            .put(Symbol.of("layout"), layout)
+            .context();
 
        SimpleTemplate page = translator.toTemplate("" +
                "{insert value=layout}\n" +

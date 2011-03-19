@@ -1,4 +1,4 @@
-package sample.hotplate.core.sample2;
+package sample.hotplate.sample;
 
 import java.util.List;
 
@@ -19,17 +19,10 @@ public class SimpleContainer extends ContainerBase<Object, SimpleTemplate> imple
         return new SimpleContainer(newElements);
     }
 
-    public String getString() {
-        StringBuilder sb = new StringBuilder();
-        for (SimpleTemplate element : elements) {
-            sb.append(element.getString());
-        }
-        return sb.toString();
-    }
-
 	public String toString() {
 	    return elements.toString();
 	}
+
 
 
 }

@@ -1,14 +1,14 @@
-package sample.hotplate.core.sample2.processor;
+package sample.hotplate.sample.processor;
 
 import java.util.List;
 
 import sample.hotplate.core.Context;
 import sample.hotplate.core.Symbol;
 import sample.hotplate.core.impl.processor.InsertProcessorBase;
-import sample.hotplate.core.sample2.SimpleReference;
-import sample.hotplate.core.sample2.SimpleTemplate;
-import sample.hotplate.core.sample2.SimpleWrapper;
 import sample.hotplate.core.util.ContextUtils;
+import sample.hotplate.sample.SimpleReference;
+import sample.hotplate.sample.SimpleTemplate;
+import sample.hotplate.sample.SimpleWrapper;
 
 public class SimpleInsertProcessor extends InsertProcessorBase<Object, SimpleTemplate> implements SimpleTemplate {
 
@@ -27,10 +27,6 @@ public class SimpleInsertProcessor extends InsertProcessorBase<Object, SimpleTem
             SimpleTemplate source,List<SimpleTemplate> elements,
             Context<Object, SimpleTemplate>argmunentContext) {
         return new SimpleInsertProcessor(context, source, elements, argmunentContext);
-    }
-    @Override
-    public String getString() {
-        throw new IllegalStateException("Unresolved insert tag:" + source);
     }
 
     public String toString() {

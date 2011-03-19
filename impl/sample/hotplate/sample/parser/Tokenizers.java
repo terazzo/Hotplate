@@ -1,7 +1,7 @@
-package sample.hotplate.core.sample2.parser;
+package sample.hotplate.sample.parser;
 
 
-import static sample.hotplate.core.sample2.parser.ParserFactory.*;
+import static sample.hotplate.sample.parser.ParserFactory.*;
 
 import java.util.ArrayList;
 import java.util.List;

@@ -1,12 +1,12 @@
-package sample.hotplate.core.sample2.parser.handler;
+package sample.hotplate.sample.parser.handler;
 
 import java.util.Collections;
 import java.util.List;
 
-import sample.hotplate.core.sample2.SimpleTemplate;
-import sample.hotplate.core.sample2.parser.Attribute;
-import sample.hotplate.core.sample2.parser.TagHandler;
-import sample.hotplate.core.sample2.processor.SimpleInsertProcessor;
+import sample.hotplate.sample.SimpleTemplate;
+import sample.hotplate.sample.parser.Attribute;
+import sample.hotplate.sample.parser.TagHandler;
+import sample.hotplate.sample.processor.SimpleInsertProcessor;
 
 public class InsertTagHandler implements TagHandler<Object, SimpleTemplate>{
     @Override

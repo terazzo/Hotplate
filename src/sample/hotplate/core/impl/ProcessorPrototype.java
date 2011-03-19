@@ -3,6 +3,7 @@ package sample.hotplate.core.impl;
 import sample.hotplate.core.Context;
 import sample.hotplate.core.Template;
 import sample.hotplate.core.TemplatePair;
+import sample.hotplate.core.TemplateWalker;
 
 public abstract class ProcessorPrototype<V, T extends Template<V, T>> implements Template<V, T> {
 
@@ -17,5 +18,9 @@ public abstract class ProcessorPrototype<V, T extends Template<V, T>> implements
     @Override
     public boolean isReducible() {
         return true;
+    }
+    @Override
+    public void traverse(TemplateWalker<V, T> walker) {
+        walker.process(this);
     }
 }

@@ -3,6 +3,7 @@ package sample.hotplate.core.impl;
 import sample.hotplate.core.Context;
 import sample.hotplate.core.Template;
 import sample.hotplate.core.TemplatePair;
+import sample.hotplate.core.TemplateWalker;
 import sample.hotplate.core.util.TemplatePairUtils;
 
 public class WrapperBase<V, T extends Template<V, T>> implements Template<V, T> {
@@ -19,5 +20,9 @@ public class WrapperBase<V, T extends Template<V, T>> implements Template<V, T> 
     @Override
     public boolean isReducible() {
         return true;
+    }
+    @Override
+    public void traverse(TemplateWalker<V, T> walker) {
+        walker.process(this);
     }
 }

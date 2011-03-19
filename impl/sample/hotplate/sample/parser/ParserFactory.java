@@ -1,4 +1,4 @@
-package sample.hotplate.core.sample2.parser;
+package sample.hotplate.sample.parser;
 
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
@@ -10,9 +10,9 @@ import org.codehaus.jparsec.Parsers;
 import org.codehaus.jparsec.Terminals;
 import org.junit.Test;
 
-import sample.hotplate.core.sample2.SimpleTemplate;
-import sample.hotplate.core.sample2.parser.handler.DefineTagHandler;
-import sample.hotplate.core.sample2.parser.handler.InsertTagHandler;
+import sample.hotplate.sample.SimpleTemplate;
+import sample.hotplate.sample.parser.handler.DefineTagHandler;
+import sample.hotplate.sample.parser.handler.InsertTagHandler;
 
 
 public final class ParserFactory {

@@ -1,4 +1,4 @@
-package sample.hotplate.core.sample2;
+package sample.hotplate.sample;
 
 import sample.hotplate.core.Symbol;
 import sample.hotplate.core.impl.ReferenceBase;
@@ -10,11 +10,8 @@ public class SimpleReference extends ReferenceBase<Object, SimpleTemplate> imple
     }
 
     @Override
-    public String getString() {
-        return "";
-    }
-    @Override
     public String toString() {
         return String.format("{*simple value=%s/}", symbol);
     }
+
 }

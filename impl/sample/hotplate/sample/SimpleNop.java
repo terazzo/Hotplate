@@ -1,4 +1,4 @@
-package sample.hotplate.core.sample2;
+package sample.hotplate.sample;
 
 import sample.hotplate.core.impl.NopBase;
 
@@ -11,11 +11,6 @@ public class SimpleNop extends NopBase<Object, SimpleTemplate> implements Simple
     @Override
     protected SimpleTemplate concreteThis() {
         return this;
-    }
-
-    @Override
-    public String getString() {
-        return "";
     }
 
     @Override

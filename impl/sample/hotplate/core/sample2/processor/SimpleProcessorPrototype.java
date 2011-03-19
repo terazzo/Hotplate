@@ -1,6 +1,6 @@
-package sample.hotplate.core.sample2.processors;
+package sample.hotplate.core.sample2.processor;
 
-import sample.hotplate.core.processor.ProcessorPrototype;
+import sample.hotplate.core.impl.ProcessorPrototype;
 import sample.hotplate.core.sample2.SimpleTemplate;
 
 public abstract class SimpleProcessorPrototype extends ProcessorPrototype<Object, SimpleTemplate> implements SimpleTemplate {

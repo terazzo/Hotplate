@@ -16,6 +16,10 @@ public final class ContextUtils {
                 }
                 return context.get(s);
             }
+            @Override
+            public String toString() {
+                return String.format("<Contexts: %s, {%s=%s}>", context, symbol, value);
+            }
         };
     }
     public static <V, T extends Template<V, T>> Context<V, T>
@@ -28,6 +32,22 @@ public final class ContextUtils {
                 }
                 return next.get(s);
             }
+            @Override
+            public String toString() {
+                return String.format("<Contexts: %s, %s>", first, next);
+            }
         };
+    }
+    @SuppressWarnings("rawtypes")
+    private static Context EMPTY_CONTEXT = 
+        new Context() {
+            public Template get(Symbol name) {
+                return null;
+            }
+        };
+    @SuppressWarnings("unchecked")
+    public static <V, T extends Template<V, T>>
+            Context<V, T> emptyContext() {
+        return EMPTY_CONTEXT;
     }
 }

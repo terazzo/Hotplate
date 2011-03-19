@@ -10,12 +10,12 @@ public class SimpleContainer extends ContainerBase<Object, SimpleTemplate> imple
 	}
 
     @Override
-    protected SimpleTemplate getConcrete() {
+    protected SimpleTemplate concreteThis() {
         return this;
     }
 
     @Override
-    protected SimpleTemplate getConcrete(List<SimpleTemplate> newElements) {
+    protected SimpleTemplate newInstance(List<SimpleTemplate> newElements) {
         return new SimpleContainer(newElements);
     }
 

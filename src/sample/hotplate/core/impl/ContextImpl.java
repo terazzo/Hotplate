@@ -24,6 +24,9 @@ public class ContextImpl<R, T extends Template<R, T>> implements Context<R, T> {
 	public T get(Symbol symbol) {
 		return scope.get(symbol);
 	}
-	
+    @Override
+    public String toString() {
+        return String.format("<Context: %s>", scope);
+    }
 
 }

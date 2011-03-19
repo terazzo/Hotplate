@@ -5,6 +5,7 @@ import java.util.List;
 
 import sample.hotplate.core.Context;
 import sample.hotplate.core.TemplatePair;
+import sample.hotplate.core.util.TemplatePairUtils;
 
 public class SimpleContainer implements SimpleTemplate {
 	private final List<SimpleTemplate> elements;
@@ -23,13 +24,13 @@ public class SimpleContainer implements SimpleTemplate {
 	@Override
 	public TemplatePair<Object, SimpleTemplate> apply(Context<Object, SimpleTemplate> context) {
 		if (!isReducible()) {
-			return new SimpleTemplatePair(this, context);
+			return TemplatePairUtils.<Object, SimpleTemplate>pairOf(this);
 		}
 		List<SimpleTemplate> newElements = new ArrayList<SimpleTemplate>();
 		for (SimpleTemplate element : elements) {
 			newElements.add(element.apply(context).template());
 		}
-		return new SimpleTemplatePair(new SimpleContainer(newElements), context);
+		return TemplatePairUtils.<Object, SimpleTemplate>pairOf(new SimpleContainer(newElements));
 	}
 
 	@Override
@@ -44,21 +45,5 @@ public class SimpleContainer implements SimpleTemplate {
 		}
 		return sb.toString();
 	}
-    @Override
-    public boolean isPrototype() {
-        return false;
-    }
-
 	
-	@Override
-	public int hashCode() {
-		return elements.hashCode();
-	}
-	@Override
-	public boolean equals(Object obj) {
-		if (obj == null || !(obj instanceof SimpleContainer)) {
-			return false;
-		}
-		return elements.equals(((SimpleContainer) obj).elements);
-	}
 }

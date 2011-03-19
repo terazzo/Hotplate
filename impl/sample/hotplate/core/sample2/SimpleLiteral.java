@@ -8,7 +8,7 @@ public class SimpleLiteral extends LiteralBase<Object, SimpleTemplate> implement
 		super(value);
 	}
     @Override
-    protected SimpleTemplate getConcrete() {
+    protected SimpleTemplate concreteThis() {
         return this;
     }
 	@Override

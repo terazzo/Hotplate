@@ -7,6 +7,8 @@ import java.util.List;
 import sample.hotplate.core.Context;
 import sample.hotplate.core.Template;
 import sample.hotplate.core.TemplatePair;
+import sample.hotplate.core.util.ContextUtils;
+import sample.hotplate.core.util.TemplatePairUtils;
 
 public abstract class ContainerBase<V, T extends Template<V, T>> implements Template<V, T>{
     protected final List<T> elements;
@@ -25,42 +27,22 @@ public abstract class ContainerBase<V, T extends Template<V, T>> implements Temp
     public boolean isReducible() {
         return isReducible;
     }
-    @Override
-    public boolean isPrototype() {
-        return false;
-    }
 
     @Override
     public TemplatePair<V, T> apply(Context<V, T> context) {
         if (!isReducible()) {
-            return TemplatePairImpl.of(getConcrete(), context);
+            return TemplatePairUtils.pairOf(concreteThis());
         }
+       
         List<T> newElements = new ArrayList<T>();
         Context<V, T> lastContext = context;
         for (T element : elements) {
-            if (element.isPrototype()) {
-                TemplatePair<V, T> concreate = element.apply(lastContext);
-                element = concreate.template();
-            }
-            TemplatePair<V, T> result = element.apply(lastContext);
-            newElements.add(result.template());
-            lastContext = result.context();
+            TemplatePair<V, T> applied = element.apply(lastContext);
+            newElements.add(applied.template());
+            lastContext = ContextUtils.merge(applied.context(), lastContext);
         }
-        return new TemplatePairImpl<V, T>(getConcrete(newElements), lastContext);
+        return TemplatePairUtils.pairOf(newInstance(newElements));
     }
-    protected abstract T getConcrete();
-    protected abstract T getConcrete(List<T> newElements);
-
-    @Override
-    public int hashCode() {
-        return elements.hashCode();
-    }
-    @Override
-    public boolean equals(Object obj) {
-        if (obj == null || !(getClass().isInstance(obj))) {
-            return false;
-        }
-        return elements.equals(getClass().cast(obj).elements);
-    }
-
+    protected abstract T concreteThis();
+    protected abstract T newInstance(List<T> newElements);
 }

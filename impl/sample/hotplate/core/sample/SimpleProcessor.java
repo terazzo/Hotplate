@@ -3,6 +3,7 @@ package sample.hotplate.core.sample;
 import sample.hotplate.core.Context;
 import sample.hotplate.core.Symbol;
 import sample.hotplate.core.TemplatePair;
+import sample.hotplate.core.util.TemplatePairUtils;
 
 public class SimpleProcessor implements SimpleTemplate {
 
@@ -16,9 +17,9 @@ public class SimpleProcessor implements SimpleTemplate {
 	public TemplatePair<Object, SimpleTemplate> apply(Context<Object, SimpleTemplate> context) {
 		SimpleTemplate value = context.get(symbol);
 		if (value == null) {
-			return new SimpleTemplatePair(this, context);
+			return TemplatePairUtils.<Object, SimpleTemplate>pairOf(this);
 		}
-		return new SimpleTemplatePair(value, context);
+		return TemplatePairUtils.pairOf(value);
 	}
 
 	@Override
@@ -42,10 +43,5 @@ public class SimpleProcessor implements SimpleTemplate {
 		}
 		return symbol.equals(((SimpleProcessor) obj).symbol);
 	}
-
-    @Override
-    public boolean isPrototype() {
-        return false;
-    }
 
 }

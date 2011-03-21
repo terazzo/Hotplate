@@ -4,19 +4,11 @@ import java.util.List;
 
 import org.codehaus.jparsec.Parser;
 
-import sample.hotplate.core.Template;
-import sample.hotplate.core.TemplateWalker;
 import sample.hotplate.core.Translator;
-import sample.hotplate.core.impl.ContainerBase;
-import sample.hotplate.core.impl.ExpressionBase;
-import sample.hotplate.core.impl.LiteralBase;
-import sample.hotplate.core.impl.NopBase;
-import sample.hotplate.core.impl.ProcessorPrototype;
-import sample.hotplate.core.impl.ReferenceBase;
-import sample.hotplate.core.impl.WrapperBase;
-import sample.hotplate.core.impl.processor.DefineProcessorBase;
-import sample.hotplate.core.impl.processor.InsertProcessorBase;
 import sample.hotplate.sample.parser.ParserFactory;
+import sample.hotplate.sample.processor.SimpleDefineProcessor;
+import sample.hotplate.sample.processor.SimpleInsertProcessor;
+import sample.hotplate.sample.processor.SimpleProcessorPrototype;
 
 
 public class SimpleTranslator implements Translator<String, Object, SimpleTemplate> {
@@ -29,44 +21,50 @@ public class SimpleTranslator implements Translator<String, Object, SimpleTempla
 	@Override
 	public String fromTemplate(SimpleTemplate template) {
 	    final StringBuilder stringBuilder = new StringBuilder();
-	    template.traverse(new TemplateWalker<Object, SimpleTemplate>() {
-            public void process(LiteralBase<Object, SimpleTemplate> literal) {
+	    template.traverse(new SimpleTemplateWalker() {
+            public void process(SimpleLiteral literal) {
                 stringBuilder.append(literal.value().toString());
             }
             public void process(
-                    ExpressionBase<Object, SimpleTemplate> expression) {
+                    SimpleExpression expression) {
                 stringBuilder.append(expression.value().toString());
             }
 
-            public void _process(Template<Object, SimpleTemplate> template) {
+            public void _process(SimpleTemplate template) {
                 if (template.isReducible()) {
                     throw new IllegalArgumentException("Not " + template);
                 }
             }
-
-            public void process(WrapperBase<Object, SimpleTemplate> wrapper) {
-                _process(wrapper);
+            @Override
+            public void process(SimpleContainer container) {
+                _process(container);
             }
-            public void process(
-                    ProcessorPrototype<Object, SimpleTemplate> processorPrototype) {
-                _process(processorPrototype);
-            }
-            public void process(ReferenceBase<Object, SimpleTemplate> reference) {
-                _process(reference);
-            }
-            public void process(NopBase<Object, SimpleTemplate> nop) {
-                _process(nop);
-            }
-            public void process(
-                    InsertProcessorBase<Object, SimpleTemplate> insertProcessor) {
-                _process(insertProcessor);
-            }
-            public void process(
-                    DefineProcessorBase<Object, SimpleTemplate> defineProcessor) {
+            @Override
+            public void process(SimpleDefineProcessor defineProcessor) {
                 _process(defineProcessor);
             }
-            public void process(ContainerBase<Object, SimpleTemplate> container) {
-                _process(container);
+            @Override
+            public void process(SimpleInsertProcessor insertProcessor) {
+                _process(insertProcessor);
+            }
+            @Override
+            public void process(SimpleNop nop) {
+                // TODO Auto-generated method stub
+                
+            }
+            @Override
+            public void process(SimpleReference reference) {
+                // TODO Auto-generated method stub
+                
+            }
+            @Override
+            public void process(SimpleProcessorPrototype processorPrototype) {
+                _process(processorPrototype);
+                
+            }
+            @Override
+            public void process(SimpleWrapper wrapperBase) {
+                _process(wrapperBase);
             }
         });
 		return stringBuilder.toString();

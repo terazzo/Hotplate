@@ -1,18 +1,30 @@
 package sample.hotplate.sample;
 
-import sample.hotplate.core.impl.ExpressionBase;
+import sample.hotplate.core.Context;
+import sample.hotplate.core.TemplatePair;
+import sample.hotplate.core.util.TemplatePairUtils;
 
-public class SimpleExpression extends ExpressionBase<Object, SimpleTemplate> implements SimpleTemplate {
+public class SimpleExpression implements SimpleTemplate {
 
+    private String expression;
     public SimpleExpression(String expression) {
-        super(expression);
+        this.expression = expression;
+    }
+    public boolean isReducible() {
+        return false;
+    }
+    public String value() {
+        return expression;
     }
     @Override
-    protected SimpleTemplate concreteThis() {
-        return this;
+    public void traverse(SimpleTemplateWalker walker) {
+        walker.process(this);
     }
-    public String toString() {
-        return String.format("'%s'", value().toString());
+    @Override
+    public TemplatePair<Object, SimpleTemplate> apply(Context<Object, SimpleTemplate> context) {
+        return TemplatePairUtils.<Object, SimpleTemplate>pairOf(this);
     }
+
+
 
 }

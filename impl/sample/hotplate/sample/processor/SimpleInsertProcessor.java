@@ -1,27 +1,52 @@
 package sample.hotplate.sample.processor;
 
 import sample.hotplate.core.Context;
-import sample.hotplate.core.impl.processor.InsertProcessorBase;
+import sample.hotplate.core.TemplatePair;
+import sample.hotplate.core.impl.ProcessorBase;
+import sample.hotplate.core.util.TemplatePairUtils;
 import sample.hotplate.sample.SimpleTemplate;
+import sample.hotplate.sample.SimpleTemplateWalker;
 import sample.hotplate.sample.SimpleWrapper;
 
-public class SimpleInsertProcessor extends InsertProcessorBase<Object, SimpleTemplate> implements SimpleTemplate {
+public class SimpleInsertProcessor extends ProcessorBase<Object, SimpleTemplate> implements SimpleTemplate {
+
+    protected final SimpleTemplate source;
+    protected final SimpleTemplate definitions;
 
     public SimpleInsertProcessor(Context<Object, SimpleTemplate>lexicalContext,
-                SimpleTemplate source, SimpleTemplate definitions) {
-        super(lexicalContext, source, definitions);
+            SimpleTemplate source, SimpleTemplate definitions) {
+        super(lexicalContext);
+        this.source = source;
+        this.definitions = definitions;
     }
 
     @Override
-    protected SimpleTemplate wrap(SimpleTemplate value) {
-        return new SimpleWrapper(value);
-    }
-    @Override
-    protected SimpleTemplate newInstance(Context<Object, SimpleTemplate> context,
-            SimpleTemplate source,SimpleTemplate definitions) {
-        return new SimpleInsertProcessor(context, source, definitions);
+    public TemplatePair<Object, SimpleTemplate> doApply(Context<Object, SimpleTemplate> context) {
+        SimpleTemplate source = this.source;
+        SimpleTemplate definitions = this.definitions;
+
+        SimpleTemplate value = this.source.apply(context).template();
+
+        if (value != null) {
+            TemplatePair<Object, SimpleTemplate> applied = definitions.apply(context);
+            definitions = applied.template();
+            Context<Object, SimpleTemplate> argumentContext = applied.context();
+    
+            TemplatePair<Object, SimpleTemplate> result = value.apply(argumentContext);
+
+            if (!result.template().isReducible()) {
+                return TemplatePairUtils.pairOf(result.template());
+            }
+            source = new SimpleWrapper(result.template());
+        }
+        return TemplatePairUtils.<Object, SimpleTemplate>pairOf(new SimpleInsertProcessor(context, source, definitions));
     }
 
+
+    @Override
+    public void traverse(SimpleTemplateWalker walker) {
+        walker.process(this);
+    }
     public String toString() {
         return String.format("{insert value=%s}%s{/insert}", source, definitions.toString());
     }
@@ -38,6 +63,10 @@ public class SimpleInsertProcessor extends InsertProcessorBase<Object, SimpleTem
                 Context<Object, SimpleTemplate> lexicalContext) {
              return new SimpleInsertProcessor(
                      lexicalContext, source, definitions);
+        }
+        @Override
+        public void traverse(SimpleTemplateWalker walker) {
+            walker.process(this);
         }
         public String toString() {
             return String.format("{*insert value=%s}%s{/*insert}", source, definitions);

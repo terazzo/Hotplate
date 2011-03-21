@@ -1,18 +1,24 @@
 package sample.hotplate.sample;
 
-import sample.hotplate.core.impl.NopBase;
+import sample.hotplate.core.Context;
+import sample.hotplate.core.TemplatePair;
+import sample.hotplate.core.util.TemplatePairUtils;
 
-public class SimpleNop extends NopBase<Object, SimpleTemplate> implements SimpleTemplate{
+public class SimpleNop implements SimpleTemplate{
 
     public SimpleNop() {
         super();
     }
 
-    @Override
-    protected SimpleTemplate concreteThis() {
-        return this;
+    public TemplatePair<Object, SimpleTemplate> apply(Context<Object, SimpleTemplate> context) {
+        return TemplatePairUtils.<Object, SimpleTemplate>pairOf(this);
     }
 
+
+    @Override
+    public void traverse(SimpleTemplateWalker walker) {
+        walker.process(this);
+    }
     @Override
     public boolean isReducible() {
         return false;

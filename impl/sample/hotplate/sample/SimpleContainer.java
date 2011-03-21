@@ -1,28 +1,54 @@
 package sample.hotplate.sample;
 
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
-import sample.hotplate.core.impl.ContainerBase;
+import sample.hotplate.core.Context;
+import sample.hotplate.core.TemplatePair;
+import sample.hotplate.core.util.ContextUtils;
+import sample.hotplate.core.util.TemplatePairUtils;
 
-public class SimpleContainer extends ContainerBase<Object, SimpleTemplate> implements SimpleTemplate {
-	public SimpleContainer(List<SimpleTemplate> elements) {
-	    super(elements);
-	}
-
+public class SimpleContainer implements SimpleTemplate {
+    protected final List<SimpleTemplate> elements;
+    private final boolean isReducible;
+    public SimpleContainer(List<SimpleTemplate> elements) {
+        this.elements = Collections.unmodifiableList(elements);
+        for (SimpleTemplate element : elements) {
+            if (element.isReducible()) {
+                this.isReducible = true;
+                return;
+            }
+        }
+        isReducible = false;
+    }
     @Override
-    protected SimpleTemplate concreteThis() {
-        return this;
+    public boolean isReducible() {
+        return isReducible;
     }
 
     @Override
-    protected SimpleTemplate newInstance(List<SimpleTemplate> newElements) {
-        return new SimpleContainer(newElements);
+    public TemplatePair<Object, SimpleTemplate> apply(Context<Object, SimpleTemplate> context) {
+        if (!isReducible()) {
+            return TemplatePairUtils.<Object, SimpleTemplate>pairOf(this);
+        }
+       
+        List<SimpleTemplate> newElements = new ArrayList<SimpleTemplate>();
+        Context<Object, SimpleTemplate> newContext = ContextUtils.emptyContext();
+        for (SimpleTemplate element : elements) {
+            Context<Object, SimpleTemplate> merged = ContextUtils.merge(newContext, context);
+            TemplatePair<Object, SimpleTemplate> applied = element.apply(merged);
+            newElements.add(applied.template());
+            newContext = ContextUtils.merge(applied.context(), newContext);
+        }
+        return TemplatePairUtils.pairOf(new SimpleContainer(newElements), newContext);
     }
 
-	public String toString() {
-	    return elements.toString();
-	}
-
-
-
+    @Override
+    public void traverse(SimpleTemplateWalker walker) {
+        walker.process(this);
+        for (SimpleTemplate element : elements) {
+           element.traverse(walker);
+        }
+    }
 }

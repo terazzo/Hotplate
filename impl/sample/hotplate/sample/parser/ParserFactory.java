@@ -12,6 +12,8 @@ import org.junit.Test;
 
 import sample.hotplate.sample.SimpleTemplate;
 import sample.hotplate.sample.parser.handler.DefineTagHandler;
+import sample.hotplate.sample.parser.handler.ForeachTagHandler;
+import sample.hotplate.sample.parser.handler.IfTagHandler;
 import sample.hotplate.sample.parser.handler.InsertTagHandler;
 
 
@@ -36,6 +38,8 @@ public final class ParserFactory {
     private void registerHandlers() {
         registerHandler(new DefineTagHandler());
         registerHandler(new InsertTagHandler());
+        registerHandler(new IfTagHandler());
+        registerHandler(new ForeachTagHandler());
     }
     public synchronized void registerHandler(TagHandler<Object, SimpleTemplate> handler) {
         for (String tagName : handler.tagNames()) {

@@ -7,6 +7,8 @@ import org.codehaus.jparsec.Parser;
 import sample.hotplate.core.Translator;
 import sample.hotplate.sample.parser.ParserFactory;
 import sample.hotplate.sample.processor.SimpleDefineProcessor;
+import sample.hotplate.sample.processor.SimpleForeachProcessor;
+import sample.hotplate.sample.processor.SimpleIfProcessor;
 import sample.hotplate.sample.processor.SimpleInsertProcessor;
 import sample.hotplate.sample.processor.SimpleProcessorPrototype;
 
@@ -25,15 +27,20 @@ public class SimpleTranslator implements Translator<String, Object, SimpleTempla
             public void process(SimpleLiteral literal) {
                 stringBuilder.append(literal.value().toString());
             }
-            public void process(
-                    SimpleExpression expression) {
-                stringBuilder.append(expression.value().toString());
+            @Override
+            public void process(SimpleValue simpleValue) {
+                stringBuilder.append(simpleValue.value().toString());
+                
             }
 
             public void _process(SimpleTemplate template) {
                 if (template.isReducible()) {
                     throw new IllegalArgumentException("Not " + template);
                 }
+            }
+            public void process(
+                    SimpleExpression expression) {
+                _process(expression);
             }
             @Override
             public void process(SimpleContainer container) {
@@ -49,13 +56,12 @@ public class SimpleTranslator implements Translator<String, Object, SimpleTempla
             }
             @Override
             public void process(SimpleNop nop) {
-                // TODO Auto-generated method stub
+                _process(nop);
                 
             }
             @Override
             public void process(SimpleReference reference) {
-                // TODO Auto-generated method stub
-                
+                _process(reference);
             }
             @Override
             public void process(SimpleProcessorPrototype processorPrototype) {
@@ -65,6 +71,15 @@ public class SimpleTranslator implements Translator<String, Object, SimpleTempla
             @Override
             public void process(SimpleWrapper wrapperBase) {
                 _process(wrapperBase);
+            }
+            @Override
+            public void process(SimpleIfProcessor simpleIfProcessor) {
+                _process(simpleIfProcessor);
+                
+            }
+            @Override
+            public void process(SimpleForeachProcessor simpleForachProcessor) {
+                _process(simpleForachProcessor);
             }
         });
 		return stringBuilder.toString();

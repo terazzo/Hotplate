@@ -28,6 +28,7 @@ public class SimpleForeachProcessor extends ProcessorBase<Object, SimpleTemplate
         this.contents = contents;
     }
 
+    @SuppressWarnings("unchecked")
     @Override
     public TemplatePair<Object, SimpleTemplate> doApply(Context<Object, SimpleTemplate> context) {
 

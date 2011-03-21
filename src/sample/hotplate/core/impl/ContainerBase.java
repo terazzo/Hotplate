@@ -36,13 +36,14 @@ public abstract class ContainerBase<V, T extends Template<V, T>> implements Temp
         }
        
         List<T> newElements = new ArrayList<T>();
-        Context<V, T> lastContext = context;
+        Context<V, T> newContext = ContextUtils.emptyContext();
         for (T element : elements) {
-            TemplatePair<V, T> applied = element.apply(lastContext);
+            Context<V, T> merged = ContextUtils.merge(newContext, context);
+            TemplatePair<V, T> applied = element.apply(merged);
             newElements.add(applied.template());
-            lastContext = ContextUtils.merge(applied.context(), lastContext);
+            newContext = ContextUtils.merge(applied.context(), newContext);
         }
-        return TemplatePairUtils.pairOf(newInstance(newElements));
+        return TemplatePairUtils.pairOf(newInstance(newElements), newContext);
     }
     protected abstract T concreteThis();
     protected abstract T newInstance(List<T> newElements);

@@ -1,8 +1,9 @@
 package sample.hotplate.sample.parser.handler;
 
-import java.util.Collections;
 import java.util.List;
 
+import sample.hotplate.sample.SimpleContainer;
+import sample.hotplate.sample.SimpleNop;
 import sample.hotplate.sample.SimpleTemplate;
 import sample.hotplate.sample.parser.Attribute;
 import sample.hotplate.sample.parser.TagHandler;
@@ -27,7 +28,7 @@ public class InsertTagHandler implements TagHandler<Object, SimpleTemplate>{
         Attribute valueAttribute = Attribute.findAttribute("value", attributes);
         return new SimpleInsertProcessor.Prototype(
                 TagHandlerUtils.valueSource(valueAttribute),
-                Collections.<SimpleTemplate>emptyList());
+                new SimpleNop());
     }
 
     @Override
@@ -35,7 +36,8 @@ public class InsertTagHandler implements TagHandler<Object, SimpleTemplate>{
             List<Attribute> attributes, List<SimpleTemplate> elements) {
         Attribute valueAttribute = Attribute.findAttribute("value", attributes);
         return new SimpleInsertProcessor.Prototype(
-                TagHandlerUtils.valueSource(valueAttribute), elements);
+                TagHandlerUtils.valueSource(valueAttribute), 
+                new SimpleContainer(elements));
     }
 
 }

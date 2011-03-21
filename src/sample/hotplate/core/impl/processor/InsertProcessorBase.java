@@ -1,8 +1,5 @@
 package sample.hotplate.core.impl.processor;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import sample.hotplate.core.Context;
 import sample.hotplate.core.Template;
 import sample.hotplate.core.TemplatePair;
@@ -14,32 +11,27 @@ import sample.hotplate.core.util.TemplatePairUtils;
 public abstract class InsertProcessorBase<V, T extends Template<V, T>> extends ProcessorBase<V, T> implements Template<V, T> {
 
     protected final T source;
-    protected final List<T> elements;
+    protected final T definitions;
 
     public InsertProcessorBase(Context<V, T>lexicalContext,
-            T source, List<T> elements) {
+            T source, T definitions) {
         super(lexicalContext);
         this.source = source;
-        this.elements = elements;
+        this.definitions = definitions;
     }
 
     @Override
     public TemplatePair<V, T> apply(Context<V, T> context) {
         Context<V, T> merged = ContextUtils.merge(context, lexicalContext);
         T source = this.source;
-        List<T> newElements = this.elements;
+        T definitions = this.definitions;
 
         T value = this.source.apply(merged).template();
 
         if (value != null) {
-            Context<V, T> argumentContext = ContextUtils.emptyContext();
-            newElements = new ArrayList<T>();
-            for (T element : this.elements) {
-                TemplatePair<V, T> applied = element.apply(merged);
-                newElements.add(applied.template());
-                argumentContext =
-                    ContextUtils.merge(applied.context(), argumentContext);
-            }
+            TemplatePair<V, T> applied = definitions.apply(merged);
+            definitions = applied.template();
+            Context<V, T> argumentContext = applied.context();
     
             TemplatePair<V, T> result = value.apply(argumentContext);
 
@@ -48,11 +40,11 @@ public abstract class InsertProcessorBase<V, T extends Template<V, T>> extends P
             }
             source = wrap(result.template());
         }
-        return TemplatePairUtils.pairOf(newInstance(merged, source, newElements));
+        return TemplatePairUtils.pairOf(newInstance(merged, source, definitions));
     }
 
     protected abstract T wrap(T value);
-    protected abstract T newInstance(Context<V, T> context, T source, List<T> elements);
+    protected abstract T newInstance(Context<V, T> context, T source, T container);
 
     @Override
     public void traverse(TemplateWalker<V, T> walker) {

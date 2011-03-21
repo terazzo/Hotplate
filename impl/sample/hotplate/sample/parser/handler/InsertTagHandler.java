@@ -24,17 +24,18 @@ public class InsertTagHandler implements TagHandler<Object, SimpleTemplate>{
     @Override
     public SimpleTemplate handleSingleTag(String tagName,
             List<Attribute> attributes) {
+        Attribute valueAttribute = Attribute.findAttribute("value", attributes);
         return new SimpleInsertProcessor.Prototype(
-                Attribute.findAttribute("value", attributes).getValue().getSymbol(), 
+                TagHandlerUtils.valueSource(valueAttribute),
                 Collections.<SimpleTemplate>emptyList());
     }
 
     @Override
     public SimpleTemplate handleContainerTag(String tagName,
             List<Attribute> attributes, List<SimpleTemplate> elements) {
+        Attribute valueAttribute = Attribute.findAttribute("value", attributes);
         return new SimpleInsertProcessor.Prototype(
-                Attribute.findAttribute("value", attributes).getValue().getSymbol(),
-                elements);
+                TagHandlerUtils.valueSource(valueAttribute), elements);
     }
 
 }

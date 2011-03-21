@@ -8,19 +8,20 @@ public final class ContextUtils {
     private ContextUtils() {
     }
     public static <V, T extends Template<V, T>> Context<V, T>
-            put(final Context<V, T> context, final Symbol symbol, final T value) {
+        newContext(final Symbol symbol, final T value) {
         return new Context<V, T>() {
             public T get(Symbol s) {
-                if (s.equals(symbol)) {
-                    return value;
-                }
-                return context.get(s);
+                return symbol.equals(s) ? value : null;
             }
             @Override
             public String toString() {
-                return String.format("<Contexts: %s, {%s=%s}>", context, symbol, value);
+                return String.format("<Context:{%s=%s}>", symbol, value);
             }
         };
+    }
+    public static <V, T extends Template<V, T>> Context<V, T>
+            put(final Context<V, T> context, final Symbol symbol, final T value) {
+        return merge(newContext(symbol, value), context);
     }
     public static <V, T extends Template<V, T>> Context<V, T>
             merge(final Context<V, T> first, final Context<V, T> next) {

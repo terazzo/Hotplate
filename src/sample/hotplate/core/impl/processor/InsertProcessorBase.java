@@ -15,49 +15,44 @@ public abstract class InsertProcessorBase<V, T extends Template<V, T>> extends P
 
     protected final T source;
     protected final List<T> elements;
-    protected final Context<V, T> argumentContext;
 
     public InsertProcessorBase(Context<V, T>lexicalContext,
-            T source, List<T> elements,
-            Context<V, T>argumentContext) {
+            T source, List<T> elements) {
         super(lexicalContext);
         this.source = source;
         this.elements = elements;
-        this.argumentContext = argumentContext;
     }
 
     @Override
     public TemplatePair<V, T> apply(Context<V, T> context) {
         Context<V, T> merged = ContextUtils.merge(context, lexicalContext);
         T source = this.source;
-        Context<V, T> newArgumentContext = this.argumentContext;
         List<T> newElements = this.elements;
 
         T value = this.source.apply(merged).template();
 
         if (value != null) {
+            Context<V, T> argumentContext = ContextUtils.emptyContext();
             newElements = new ArrayList<T>();
             for (T element : this.elements) {
                 TemplatePair<V, T> applied = element.apply(merged);
                 newElements.add(applied.template());
-                newArgumentContext =
-                    ContextUtils.merge(applied.context(), newArgumentContext);
+                argumentContext =
+                    ContextUtils.merge(applied.context(), argumentContext);
             }
     
-            TemplatePair<V, T> result = value.apply(newArgumentContext);
+            TemplatePair<V, T> result = value.apply(argumentContext);
 
-            if (result.template() != null && !result.template().isReducible()) {
+            if (!result.template().isReducible()) {
                 return TemplatePairUtils.pairOf(result.template());
             }
-            source = wrap(value);
+            source = wrap(result.template());
         }
-        return TemplatePairUtils.pairOf(newInstance(merged, source, newElements, newArgumentContext));
+        return TemplatePairUtils.pairOf(newInstance(merged, source, newElements));
     }
 
     protected abstract T wrap(T value);
-    protected abstract T newInstance(
-            Context<V, T> context, T source, List<T> elements,
-            Context<V, T> argumentContext);
+    protected abstract T newInstance(Context<V, T> context, T source, List<T> elements);
 
     @Override
     public void traverse(TemplateWalker<V, T> walker) {

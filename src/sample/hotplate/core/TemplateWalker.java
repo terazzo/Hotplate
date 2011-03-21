@@ -1,6 +1,7 @@
 package sample.hotplate.core;
 
 import sample.hotplate.core.impl.ContainerBase;
+import sample.hotplate.core.impl.ExpressionBase;
 import sample.hotplate.core.impl.LiteralBase;
 import sample.hotplate.core.impl.NopBase;
 import sample.hotplate.core.impl.ProcessorPrototype;
@@ -19,5 +20,6 @@ public interface TemplateWalker<V, T extends Template<V,T>> {
     void process(ReferenceBase<V, T> reference);
     void process(ProcessorPrototype<V, T> processorPrototype);
     void process(WrapperBase<V, T> wrapperBase);
+    void process(ExpressionBase<V, T> expressionBase);
 
 }

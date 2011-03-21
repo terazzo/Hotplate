@@ -6,17 +6,17 @@ import sample.hotplate.core.TemplatePair;
 import sample.hotplate.core.TemplateWalker;
 import sample.hotplate.core.util.TemplatePairUtils;
 
-public abstract class LiteralBase<V, T extends Template<V, T>> implements Template<V, T> {
+public abstract class ExpressionBase<V, T extends Template<V, T>> implements Template<V, T> {
 
-	private V value;
-	public LiteralBase(V value) {
-		this.value = value;
+	private V expression;
+	public ExpressionBase(V expression) {
+		this.expression = expression;
 	}
 	public boolean isReducible() {
 		return false;
 	}
 	public V value() {
-		return value;
+		return expression;
 	}
 	@Override
 	public TemplatePair<V, T> apply(Context<V, T> context) {

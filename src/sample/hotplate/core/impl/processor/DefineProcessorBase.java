@@ -24,8 +24,7 @@ public abstract class DefineProcessorBase<V, T extends Template<V,T>> extends Pr
         Context<V, T> merged = ContextUtils.merge(context, lexicalContext);
         T value = source.apply(merged).template();
         if (value != null) {
-            Context<V, T> newContext =
-                ContextUtils.put(ContextUtils.<V, T>emptyContext(), symbol, value);
+            Context<V, T> newContext = ContextUtils.newContext(symbol, value);
             return TemplatePairUtils.pairOf(getNop(), newContext);
         } else {
             return TemplatePairUtils.pairOf(newInstance(merged, symbol, source));

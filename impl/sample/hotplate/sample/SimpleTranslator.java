@@ -8,6 +8,7 @@ import sample.hotplate.core.Template;
 import sample.hotplate.core.TemplateWalker;
 import sample.hotplate.core.Translator;
 import sample.hotplate.core.impl.ContainerBase;
+import sample.hotplate.core.impl.ExpressionBase;
 import sample.hotplate.core.impl.LiteralBase;
 import sample.hotplate.core.impl.NopBase;
 import sample.hotplate.core.impl.ProcessorPrototype;
@@ -32,6 +33,11 @@ public class SimpleTranslator implements Translator<String, Object, SimpleTempla
             public void process(LiteralBase<Object, SimpleTemplate> literal) {
                 stringBuilder.append(literal.value().toString());
             }
+            public void process(
+                    ExpressionBase<Object, SimpleTemplate> expression) {
+                stringBuilder.append(expression.value().toString());
+            }
+
             public void _process(Template<Object, SimpleTemplate> template) {
                 if (template.isReducible()) {
                     throw new IllegalArgumentException("Not " + template);

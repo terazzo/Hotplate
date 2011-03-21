@@ -2,10 +2,7 @@ package sample.hotplate.sample.parser.handler;
 
 import java.util.List;
 
-import sample.hotplate.core.Symbol;
 import sample.hotplate.sample.SimpleContainer;
-import sample.hotplate.sample.SimpleLiteral;
-import sample.hotplate.sample.SimpleReference;
 import sample.hotplate.sample.SimpleTemplate;
 import sample.hotplate.sample.parser.Attribute;
 import sample.hotplate.sample.parser.TagHandler;
@@ -27,25 +24,19 @@ public class DefineTagHandler implements TagHandler<Object, SimpleTemplate>{
     @Override
     public SimpleTemplate handleSingleTag(String tagName,
             List<Attribute> attributes) {
+        Attribute nameAttribute = Attribute.findAttribute("name", attributes);
         Attribute valueAttribute = Attribute.findAttribute("value", attributes);
-        final SimpleTemplate value;
-        if (valueAttribute.getValue().isSymbol()) {
-            Symbol symbol = valueAttribute.getValue().getSymbol();
-            value = new SimpleReference(symbol);
-        } else {
-            final String expression = valueAttribute.getValue().getExpression();
-            value = new SimpleLiteral(expression);
-        }
         return new SimpleDefineProcessor.Prototype(
-                Attribute.findAttribute("name", attributes).getValue().getSymbol(), value);
+                nameAttribute.getValue().getSymbol(), 
+                TagHandlerUtils.valueSource(valueAttribute));
     }
 
     @Override
     public SimpleTemplate handleContainerTag(String tagName,
             List<Attribute> attributes, List<SimpleTemplate> elements) {
+        Attribute nameAttribute = Attribute.findAttribute("name", attributes);
         return new SimpleDefineProcessor.Prototype(
-                Attribute.findAttribute("name", attributes).getValue().getSymbol(), 
-                new SimpleContainer(elements));
+                nameAttribute.getValue().getSymbol(), new SimpleContainer(elements));
     }
 
 }

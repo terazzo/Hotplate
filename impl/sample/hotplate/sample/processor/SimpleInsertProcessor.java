@@ -5,7 +5,6 @@ import sample.hotplate.core.TemplatePair;
 import sample.hotplate.core.impl.ProcessorBase;
 import sample.hotplate.core.util.TemplatePairUtils;
 import sample.hotplate.sample.SimpleTemplate;
-import sample.hotplate.sample.SimpleTemplateWalker;
 import sample.hotplate.sample.SimpleWrapper;
 
 public class SimpleInsertProcessor extends ProcessorBase<Object, SimpleTemplate> implements SimpleTemplate {
@@ -44,8 +43,8 @@ public class SimpleInsertProcessor extends ProcessorBase<Object, SimpleTemplate>
 
 
     @Override
-    public void traverse(SimpleTemplateWalker walker) {
-        walker.process(this);
+    public String getString() {
+        throw new IllegalStateException("Unevaluated insert:" + this);
     }
     public String toString() {
         return String.format("{insert value=%s}%s{/insert}", source, definitions.toString());
@@ -63,10 +62,6 @@ public class SimpleInsertProcessor extends ProcessorBase<Object, SimpleTemplate>
                 Context<Object, SimpleTemplate> lexicalContext) {
              return new SimpleInsertProcessor(
                      lexicalContext, source, definitions);
-        }
-        @Override
-        public void traverse(SimpleTemplateWalker walker) {
-            walker.process(this);
         }
         public String toString() {
             return String.format("{*insert value=%s}%s{/*insert}", source, definitions);

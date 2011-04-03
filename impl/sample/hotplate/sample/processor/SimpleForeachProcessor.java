@@ -11,7 +11,6 @@ import sample.hotplate.core.util.ContextUtils;
 import sample.hotplate.core.util.TemplatePairUtils;
 import sample.hotplate.sample.SimpleContainer;
 import sample.hotplate.sample.SimpleTemplate;
-import sample.hotplate.sample.SimpleTemplateWalker;
 import sample.hotplate.sample.SimpleValue;
 
 public class SimpleForeachProcessor extends ProcessorBase<Object, SimpleTemplate> implements SimpleTemplate {
@@ -57,8 +56,8 @@ public class SimpleForeachProcessor extends ProcessorBase<Object, SimpleTemplate
 
 
     @Override
-    public void traverse(SimpleTemplateWalker walker) {
-        walker.process(this);
+    public String getString() {
+        throw new IllegalStateException("Unevaluated foreach:" + this);
     }
     public String toString() {
         return String.format("{foreach items=%s var=%s}%s{/foreach}", items, var, contents);
@@ -78,10 +77,6 @@ public class SimpleForeachProcessor extends ProcessorBase<Object, SimpleTemplate
                 Context<Object, SimpleTemplate> lexicalContext) {
              return new SimpleForeachProcessor(
                      lexicalContext, items, var, contents);
-        }
-        @Override
-        public void traverse(SimpleTemplateWalker walker) {
-            walker.process(this);
         }
         public String toString() {
             return String.format("{*foreach items=%s var=%s}%s{/*foreach}", items, var, contents);

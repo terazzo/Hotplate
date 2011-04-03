@@ -21,8 +21,8 @@ public class SimpleExpression implements SimpleTemplate {
         return true;
     }
     @Override
-    public void traverse(SimpleTemplateWalker walker) {
-        walker.process(this);
+    public String getString() {
+        throw new IllegalStateException("Unevaluated expression:" + expression);
     }
     @Override
     public TemplatePair<Object, SimpleTemplate> apply(Context<Object, SimpleTemplate> context) {

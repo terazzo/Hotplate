@@ -45,10 +45,11 @@ public class SimpleContainer implements SimpleTemplate {
     }
 
     @Override
-    public void traverse(SimpleTemplateWalker walker) {
-        walker.process(this);
-        for (SimpleTemplate element : elements) {
-           element.traverse(walker);
+    public String getString() {
+        StringBuilder containerContents = new StringBuilder();
+        for (SimpleTemplate element: elements) {
+            containerContents.append(element.getString());
         }
+        return containerContents.toString();
     }
 }

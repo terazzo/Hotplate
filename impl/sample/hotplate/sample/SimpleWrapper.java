@@ -19,8 +19,8 @@ public class SimpleWrapper implements SimpleTemplate {
         return true;
     }
     @Override
-    public void traverse(SimpleTemplateWalker walker) {
-        walker.process(this);
+    public String getString() {
+        throw new IllegalStateException("Unwrapped content:" + content);
     }
     public String toString() {
         return String.format("{*wrap value=%s/}", content);

@@ -6,7 +6,6 @@ import sample.hotplate.core.impl.ProcessorBase;
 import sample.hotplate.core.util.TemplatePairUtils;
 import sample.hotplate.sample.SimpleNop;
 import sample.hotplate.sample.SimpleTemplate;
-import sample.hotplate.sample.SimpleTemplateWalker;
 import sample.hotplate.sample.SimpleValue;
 
 public class SimpleIfProcessor extends ProcessorBase<Object, SimpleTemplate> implements SimpleTemplate {
@@ -41,8 +40,8 @@ public class SimpleIfProcessor extends ProcessorBase<Object, SimpleTemplate> imp
 
 
     @Override
-    public void traverse(SimpleTemplateWalker walker) {
-        walker.process(this);
+    public String getString() {
+        throw new IllegalStateException("Unevaluated if:" + this);
     }
     public String toString() {
         return String.format("{if condition=%s}%s{/if}", condition, contents);
@@ -60,10 +59,6 @@ public class SimpleIfProcessor extends ProcessorBase<Object, SimpleTemplate> imp
                 Context<Object, SimpleTemplate> lexicalContext) {
              return new SimpleIfProcessor(
                      lexicalContext, condition, contents);
-        }
-        @Override
-        public void traverse(SimpleTemplateWalker walker) {
-            walker.process(this);
         }
         public String toString() {
             return String.format("{*if condition=%s}%s{/*if}", condition, contents);

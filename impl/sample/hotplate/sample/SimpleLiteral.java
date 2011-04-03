@@ -22,8 +22,8 @@ public class SimpleLiteral implements SimpleTemplate {
     }
 
     @Override
-    public void traverse(SimpleTemplateWalker walker) {
-        walker.process(this);
+    public String getString() {
+        return value.toString();
     }
     public String toString() {
         return String.format("'%s'", value().toString());

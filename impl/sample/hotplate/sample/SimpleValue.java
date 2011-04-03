@@ -17,10 +17,9 @@ public class SimpleValue implements SimpleTemplate {
         return value;
     }
     @Override
-    public void traverse(SimpleTemplateWalker walker) {
-        walker.process(this);
+    public String getString() {
+        return value.toString();
     }
-    @Override
     public TemplatePair<Object, SimpleTemplate> apply(Context<Object, SimpleTemplate> context) {
         return TemplatePairUtils.<Object, SimpleTemplate>pairOf(this);
     }

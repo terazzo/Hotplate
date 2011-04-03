@@ -22,8 +22,8 @@ public class SimpleReference implements SimpleTemplate{
         return true;
     }
     @Override
-    public void traverse(SimpleTemplateWalker walker) {
-        walker.process(this);
+    public String getString() {
+        throw new IllegalStateException("Unbound reference:" + symbol);
     }
     @Override
     public String toString() {

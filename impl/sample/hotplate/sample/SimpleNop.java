@@ -16,8 +16,8 @@ public class SimpleNop implements SimpleTemplate{
 
 
     @Override
-    public void traverse(SimpleTemplateWalker walker) {
-        walker.process(this);
+    public String getString() {
+        return "";
     }
     @Override
     public boolean isReducible() {

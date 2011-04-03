@@ -13,7 +13,7 @@ public abstract class ProcessorBase<V, T extends Template<V, T>> implements Temp
     }
     
     @Override
-    public TemplatePair<V, T> apply(Context<V, T> context) {
+    public final TemplatePair<V, T> apply(Context<V, T> context) {
         Context<V, T> merged = ContextUtils.merge(context, lexicalContext);
         return doApply(merged);
     }

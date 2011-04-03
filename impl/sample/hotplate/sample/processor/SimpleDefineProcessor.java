@@ -8,7 +8,6 @@ import sample.hotplate.core.util.ContextUtils;
 import sample.hotplate.core.util.TemplatePairUtils;
 import sample.hotplate.sample.SimpleNop;
 import sample.hotplate.sample.SimpleTemplate;
-import sample.hotplate.sample.SimpleTemplateWalker;
 
 public class SimpleDefineProcessor extends ProcessorBase<Object, SimpleTemplate> implements SimpleTemplate {
 
@@ -31,8 +30,8 @@ public class SimpleDefineProcessor extends ProcessorBase<Object, SimpleTemplate>
         }
     }
     @Override
-    public void traverse(SimpleTemplateWalker walker) {
-        walker.process(this);
+    public String getString() {
+        return "";
     }
 
     public static class Prototype extends SimpleProcessorPrototype {
@@ -49,10 +48,6 @@ public class SimpleDefineProcessor extends ProcessorBase<Object, SimpleTemplate>
         }
         public String toString() {
             return String.format("{*define name=%s value=%s/}", symbol, value);
-        }
-        @Override
-        public void traverse(SimpleTemplateWalker walker) {
-            walker.process(this);
         }
     }
 

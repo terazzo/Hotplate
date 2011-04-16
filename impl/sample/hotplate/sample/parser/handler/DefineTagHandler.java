@@ -14,11 +14,11 @@ public class DefineTagHandler implements TagHandler {
         return new String[] {"define"};
     }
     @Override
-    public boolean requireContainerTag() {
+    public boolean requireSingleTag(String tagName) {
         return true;
     }
     @Override
-    public boolean requireSingleTag() {
+    public boolean requireContainerTag(String tagName) {
         return true;
     }
     @Override
@@ -28,7 +28,7 @@ public class DefineTagHandler implements TagHandler {
         Attribute valueAttribute = Attribute.findAttribute("value", attributes);
         return new SimpleDefineProcessorPrototype(
                 nameAttribute.getValue().getSymbol(), 
-                TagHandlerUtils.valueSource(valueAttribute));
+                TagHandlerUtils.makeSource(valueAttribute));
     }
 
     @Override

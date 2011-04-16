@@ -14,12 +14,12 @@ public class IfTagHandler implements TagHandler {
         return new String[] {"if"};
     }
     @Override
-    public boolean requireContainerTag() {
-        return true;
+    public boolean requireSingleTag(String tagName) {
+        return false;
     }
     @Override
-    public boolean requireSingleTag() {
-        return false;
+    public boolean requireContainerTag(String tagName) {
+        return true;
     }
     @Override
     public SimpleTemplatePrototype handleSingleTag(String tagName,
@@ -32,7 +32,7 @@ public class IfTagHandler implements TagHandler {
             List<Attribute> attributes, List<SimpleTemplatePrototype> elements) {
         Attribute conditionAttribute = Attribute.findAttribute("condition", attributes);
         return new SimpleIfProcessorPrototype(
-                TagHandlerUtils.valueSource(conditionAttribute), 
+                TagHandlerUtils.makeSource(conditionAttribute), 
                 new SimpleContainerPrototype(elements));
     }
 

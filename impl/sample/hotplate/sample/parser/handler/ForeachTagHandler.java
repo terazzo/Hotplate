@@ -14,12 +14,12 @@ public class ForeachTagHandler implements TagHandler{
         return new String[] {"foreach"};
     }
     @Override
-    public boolean requireContainerTag() {
-        return true;
+    public boolean requireSingleTag(String tagName) {
+        return false;
     }
     @Override
-    public boolean requireSingleTag() {
-        return false;
+    public boolean requireContainerTag(String tagName) {
+        return true;
     }
     @Override
     public SimpleTemplatePrototype handleSingleTag(String tagName,
@@ -33,7 +33,7 @@ public class ForeachTagHandler implements TagHandler{
         Attribute itemsAttribute = Attribute.findAttribute("items", attributes);
         Attribute varAttribute = Attribute.findAttribute("var", attributes);
         return new SimpleForeachProcessorPrototype(
-                TagHandlerUtils.valueSource(itemsAttribute), 
+                TagHandlerUtils.makeSource(itemsAttribute), 
                 varAttribute.getValue().getSymbol(), 
                 new SimpleContainerPrototype(elements));
     }

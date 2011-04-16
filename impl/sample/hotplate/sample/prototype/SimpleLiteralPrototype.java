@@ -4,7 +4,7 @@ import sample.hotplate.core.Context;
 import sample.hotplate.sample.SimpleLiteral;
 import sample.hotplate.sample.SimpleTemplate;
 
-public class SimpleLiteralPrototype extends AbstractSimpleTemplatePrototype {
+public class SimpleLiteralPrototype implements SimpleTemplatePrototype {
     private final String text;
     public SimpleLiteralPrototype(String text) {
         super();

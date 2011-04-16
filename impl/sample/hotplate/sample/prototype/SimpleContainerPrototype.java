@@ -6,8 +6,10 @@ import java.util.List;
 import sample.hotplate.core.Context;
 import sample.hotplate.sample.SimpleContainer;
 import sample.hotplate.sample.SimpleTemplate;
+import sample.hotplate.sample.source.SimpleTemplateSource;
 
-public class SimpleContainerPrototype extends AbstractSimpleTemplatePrototype {
+public class SimpleContainerPrototype
+        implements SimpleTemplatePrototype, SimpleTemplateSource {
     protected final List<SimpleTemplatePrototype> elements;
 
     public SimpleContainerPrototype(List<SimpleTemplatePrototype> elements) {
@@ -23,5 +25,8 @@ public class SimpleContainerPrototype extends AbstractSimpleTemplatePrototype {
         }
         return new SimpleContainer(lexicalContext, tempalteElements);
     }
-
+    @Override
+    public SimpleTemplate getTemplate(Context<Object, SimpleTemplate> context) {
+        return instantiate(context);
+    }
 }

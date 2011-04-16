@@ -15,6 +15,11 @@ import org.codehaus.jparsec.functors.Map3;
 import org.codehaus.jparsec.pattern.Patterns;
 import org.junit.Test;
 
+import sample.hotplate.sample.parser.Attribute;
+import sample.hotplate.sample.parser.Expression;
+import sample.hotplate.sample.parser.SymbolValue;
+import sample.hotplate.sample.prototype.SimpleTemplatePrototype;
+
 public class SampleParser {
     @Test
     public void testParser() {

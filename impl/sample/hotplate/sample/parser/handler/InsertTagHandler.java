@@ -15,11 +15,11 @@ public class InsertTagHandler implements TagHandler {
         return new String[] {"insert"};
     }
     @Override
-    public boolean requireContainerTag() {
+    public boolean requireSingleTag(String tagName) {
         return true;
     }
     @Override
-    public boolean requireSingleTag() {
+    public boolean requireContainerTag(String tagName) {
         return true;
     }
     @Override
@@ -27,7 +27,7 @@ public class InsertTagHandler implements TagHandler {
             List<Attribute> attributes) {
         Attribute valueAttribute = Attribute.findAttribute("value", attributes);
         return new SimpleInsertProcessorPrototype(
-                TagHandlerUtils.valueSource(valueAttribute),
+                TagHandlerUtils.makeSource(valueAttribute),
                 new SimpleContainerPrototype(Collections.<SimpleTemplatePrototype>emptyList()));
     }
 
@@ -36,7 +36,7 @@ public class InsertTagHandler implements TagHandler {
             List<Attribute> attributes, List<SimpleTemplatePrototype> elements) {
         Attribute valueAttribute = Attribute.findAttribute("value", attributes);
         return new SimpleInsertProcessorPrototype(
-                TagHandlerUtils.valueSource(valueAttribute), 
+                TagHandlerUtils.makeSource(valueAttribute), 
                 new SimpleContainerPrototype(elements));
     }
 

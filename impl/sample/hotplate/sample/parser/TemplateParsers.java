@@ -15,6 +15,7 @@ import org.codehaus.jparsec.functors.Map;
 import org.codehaus.jparsec.functors.Map2;
 import org.codehaus.jparsec.functors.Map3;
 
+import sample.hotplate.sample.prototype.SimpleContainerPrototype;
 import sample.hotplate.sample.prototype.SimpleLiteralPrototype;
 import sample.hotplate.sample.prototype.SimpleTemplatePrototype;
 
@@ -23,7 +24,7 @@ import sample.hotplate.sample.prototype.SimpleTemplatePrototype;
 public final class TemplateParsers {
     private TemplateParsers() {
     }
-    static Parser<SimpleTemplatePrototype> makeLiteralParser() {
+    public static Parser<SimpleTemplatePrototype> makeLiteralParser() {
         return Terminals.fragment(LITERAL_NAME).map(
             new Map<String, SimpleTemplatePrototype>() {
                 public SimpleTemplatePrototype map(String source) {
@@ -32,13 +33,12 @@ public final class TemplateParsers {
             }
         );
     }
-    static Parser<SimpleTemplatePrototype> makeSingleTagParser(
-            Terminals tags, 
-            String tagName, final TagHandler handler) {
+    public static Parser<SimpleTemplatePrototype> makeSingleTagParser(
+            Terminals tags, String tagName, final TagHandler handler) {
         return
             startBrace.token("{").next(
                 Parsers.sequence(
-                    tags.token(tagName), attributeParser().many(), 
+                    tags.token(tagName), makeAttributeParser().many(), 
                     new Map2<Token, List<Attribute>, SimpleTemplatePrototype>() {
                         public SimpleTemplatePrototype map(Token tagToken, List<Attribute> attributes) {
                             String tagName = tagToken.toString();
@@ -50,8 +50,7 @@ public final class TemplateParsers {
     }
     public static Parser<SimpleTemplatePrototype> makeContainerTagParser(
             Terminals tags, Parser<List<SimpleTemplatePrototype>> contentParser,
-            final String tagName,
-            final TagHandler handler) {
+            final String tagName, final TagHandler handler) {
 
         return Parsers.sequence(
             startTagParser(tags, tagName),
@@ -68,7 +67,7 @@ public final class TemplateParsers {
         return
             startBrace.token("{").next(
                 Parsers.sequence(
-                    tags.token(tagName), attributeParser().many(), 
+                    tags.token(tagName), makeAttributeParser().many(), 
                     new Map2<Token, List<Attribute>, List<Attribute>>() {
                         public List<Attribute> map(Token tagToken, List<Attribute> attrs) {
                             return attrs;
@@ -87,7 +86,7 @@ public final class TemplateParsers {
                 })
             ).followedBy(endBrace.token("}"));
     }
-    private static Parser<Attribute> attributeParser() {
+    private static Parser<Attribute> makeAttributeParser() {
         Parser<Attribute> withExpression = 
             Parsers.sequence(
                 Terminals.Identifier.PARSER,
@@ -113,6 +112,17 @@ public final class TemplateParsers {
                 });
 
         return Parsers.or(withExpression, withSymbol);
+    }
+    /**
+     * @return listParserÇå≥Ç…SimpleTemplatePrototypeÇê∂ê¨Ç∑ÇÈParserÇñﬂÇ∑
+     * @param listParser List<SimpleTemplatePrototype>Çê∂ê¨Ç∑ÇÈParser
+     */
+    public static Parser<SimpleTemplatePrototype> flatten(Parser<List<SimpleTemplatePrototype>> listParser) {
+        return listParser.map(new Map<List<SimpleTemplatePrototype>, SimpleTemplatePrototype>() {
+            public SimpleTemplatePrototype map(List<SimpleTemplatePrototype> elements) {
+                return new SimpleContainerPrototype(elements);
+            }
+        });
     }
 
 }

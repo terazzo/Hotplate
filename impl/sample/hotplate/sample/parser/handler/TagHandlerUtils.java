@@ -8,15 +8,15 @@ import sample.hotplate.sample.source.SimpleReference;
 import sample.hotplate.sample.source.SimpleTemplateSource;
 
 public final class TagHandlerUtils {
-    public static SimpleTemplateSource valueSource(Attribute valueAttribute) {
-        final SimpleTemplateSource value;
-        if (valueAttribute.getValue().isSymbol()) {
-            Symbol symbol = valueAttribute.getValue().getSymbol();
-            value = new SimpleReference(symbol);
+    public static SimpleTemplateSource makeSource(Attribute attribute) {
+        final SimpleTemplateSource source;
+        if (attribute.getValue().isSymbol()) {
+            Symbol symbol = attribute.getValue().getSymbol();
+            source = new SimpleReference(symbol);
         } else {
-            final String expression = valueAttribute.getValue().getExpression();
-            value = new SimpleExpression(expression);
+            final String expression = attribute.getValue().getExpression();
+            source = new SimpleExpression(expression);
         }
-        return value;
+        return source;
     }
 }

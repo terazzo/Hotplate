@@ -4,7 +4,7 @@ import java.util.List;
 
 import sample.hotplate.sample.parser.Attribute;
 import sample.hotplate.sample.parser.TagHandler;
-import sample.hotplate.sample.processor.SimpleIfProcessor;
+import sample.hotplate.sample.processor.prototype.SimpleIfProcessorPrototype;
 import sample.hotplate.sample.prototype.SimpleContainerPrototype;
 import sample.hotplate.sample.prototype.SimpleTemplatePrototype;
 
@@ -31,7 +31,7 @@ public class IfTagHandler implements TagHandler {
     public SimpleTemplatePrototype handleContainerTag(String tagName,
             List<Attribute> attributes, List<SimpleTemplatePrototype> elements) {
         Attribute conditionAttribute = Attribute.findAttribute("condition", attributes);
-        return new SimpleIfProcessor.Prototype(
+        return new SimpleIfProcessorPrototype(
                 TagHandlerUtils.valueSource(conditionAttribute), 
                 new SimpleContainerPrototype(elements));
     }

@@ -8,7 +8,6 @@ import sample.hotplate.core.util.TemplatePairUtils;
 import sample.hotplate.sample.AbstractSimpleTemplate;
 import sample.hotplate.sample.SimpleNop;
 import sample.hotplate.sample.SimpleTemplate;
-import sample.hotplate.sample.prototype.AbstractSimpleTemplatePrototype;
 import sample.hotplate.sample.source.SimpleTemplateSource;
 
 public class SimpleDefineProcessor extends AbstractSimpleTemplate implements SimpleTemplate {
@@ -39,20 +38,4 @@ public class SimpleDefineProcessor extends AbstractSimpleTemplate implements Sim
     public String getString() {
         return "";
     }
-
-    public static class Prototype extends AbstractSimpleTemplatePrototype {
-        private Symbol symbol;
-        private SimpleTemplateSource source;
-        public Prototype(Symbol symbol, SimpleTemplateSource source) {
-            super();
-            this.symbol = symbol;
-            this.source = source;
-        }
-        public SimpleTemplate instantiate(
-                Context<Object, SimpleTemplate> lexicalContext) {
-             return new SimpleDefineProcessor(lexicalContext, symbol, source);
-        }
-    }
-
-
 }

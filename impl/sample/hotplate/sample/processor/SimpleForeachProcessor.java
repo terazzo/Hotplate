@@ -12,8 +12,6 @@ import sample.hotplate.sample.AbstractSimpleTemplate;
 import sample.hotplate.sample.SimpleContainer;
 import sample.hotplate.sample.SimpleTemplate;
 import sample.hotplate.sample.SimpleValue;
-import sample.hotplate.sample.prototype.AbstractSimpleTemplatePrototype;
-import sample.hotplate.sample.prototype.SimpleTemplatePrototype;
 import sample.hotplate.sample.source.SimpleTemplateSource;
 
 public class SimpleForeachProcessor extends AbstractSimpleTemplate implements SimpleTemplate {
@@ -67,27 +65,6 @@ public class SimpleForeachProcessor extends AbstractSimpleTemplate implements Si
     }
     public String toString() {
         return String.format("{foreach items=%s var=%s}%s{/foreach}", items, var, contents);
-    }
-
-    public static class Prototype extends AbstractSimpleTemplatePrototype {
-        private final SimpleTemplateSource items;
-        private final Symbol var;
-        private final SimpleTemplatePrototype contents;
-        public Prototype(SimpleTemplateSource items, Symbol var, SimpleTemplatePrototype contents) {
-            super();
-            this.items = items;
-            this.var = var;
-            this.contents = contents;
-        }
-        public SimpleTemplate instantiate(
-                Context<Object, SimpleTemplate> lexicalContext) {
-             return new SimpleForeachProcessor(
-                     lexicalContext, items, var, 
-                     contents.instantiate(lexicalContext));
-        }
-        public String toString() {
-            return String.format("{*foreach items=%s var=%s}%s{/*foreach}", items, var, contents);
-        }
     }
 
 

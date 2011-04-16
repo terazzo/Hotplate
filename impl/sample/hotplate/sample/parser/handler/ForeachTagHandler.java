@@ -4,7 +4,7 @@ import java.util.List;
 
 import sample.hotplate.sample.parser.Attribute;
 import sample.hotplate.sample.parser.TagHandler;
-import sample.hotplate.sample.processor.SimpleForeachProcessor;
+import sample.hotplate.sample.processor.prototype.SimpleForeachProcessorPrototype;
 import sample.hotplate.sample.prototype.SimpleContainerPrototype;
 import sample.hotplate.sample.prototype.SimpleTemplatePrototype;
 
@@ -32,7 +32,7 @@ public class ForeachTagHandler implements TagHandler{
             List<Attribute> attributes, List<SimpleTemplatePrototype> elements) {
         Attribute itemsAttribute = Attribute.findAttribute("items", attributes);
         Attribute varAttribute = Attribute.findAttribute("var", attributes);
-        return new SimpleForeachProcessor.Prototype(
+        return new SimpleForeachProcessorPrototype(
                 TagHandlerUtils.valueSource(itemsAttribute), 
                 varAttribute.getValue().getSymbol(), 
                 new SimpleContainerPrototype(elements));

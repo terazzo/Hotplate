@@ -5,7 +5,7 @@ import java.util.List;
 
 import sample.hotplate.sample.parser.Attribute;
 import sample.hotplate.sample.parser.TagHandler;
-import sample.hotplate.sample.processor.SimpleInsertProcessor;
+import sample.hotplate.sample.processor.prototype.SimpleInsertProcessorPrototype;
 import sample.hotplate.sample.prototype.SimpleContainerPrototype;
 import sample.hotplate.sample.prototype.SimpleTemplatePrototype;
 
@@ -26,7 +26,7 @@ public class InsertTagHandler implements TagHandler {
     public SimpleTemplatePrototype handleSingleTag(String tagName,
             List<Attribute> attributes) {
         Attribute valueAttribute = Attribute.findAttribute("value", attributes);
-        return new SimpleInsertProcessor.Prototype(
+        return new SimpleInsertProcessorPrototype(
                 TagHandlerUtils.valueSource(valueAttribute),
                 new SimpleContainerPrototype(Collections.<SimpleTemplatePrototype>emptyList()));
     }
@@ -35,7 +35,7 @@ public class InsertTagHandler implements TagHandler {
     public SimpleTemplatePrototype handleContainerTag(String tagName,
             List<Attribute> attributes, List<SimpleTemplatePrototype> elements) {
         Attribute valueAttribute = Attribute.findAttribute("value", attributes);
-        return new SimpleInsertProcessor.Prototype(
+        return new SimpleInsertProcessorPrototype(
                 TagHandlerUtils.valueSource(valueAttribute), 
                 new SimpleContainerPrototype(elements));
     }

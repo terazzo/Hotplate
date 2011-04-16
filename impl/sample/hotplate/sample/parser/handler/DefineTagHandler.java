@@ -4,7 +4,7 @@ import java.util.List;
 
 import sample.hotplate.sample.parser.Attribute;
 import sample.hotplate.sample.parser.TagHandler;
-import sample.hotplate.sample.processor.SimpleDefineProcessor;
+import sample.hotplate.sample.processor.prototype.SimpleDefineProcessorPrototype;
 import sample.hotplate.sample.prototype.SimpleContainerPrototype;
 import sample.hotplate.sample.prototype.SimpleTemplatePrototype;
 
@@ -26,7 +26,7 @@ public class DefineTagHandler implements TagHandler {
             List<Attribute> attributes) {
         Attribute nameAttribute = Attribute.findAttribute("name", attributes);
         Attribute valueAttribute = Attribute.findAttribute("value", attributes);
-        return new SimpleDefineProcessor.Prototype(
+        return new SimpleDefineProcessorPrototype(
                 nameAttribute.getValue().getSymbol(), 
                 TagHandlerUtils.valueSource(valueAttribute));
     }
@@ -35,7 +35,7 @@ public class DefineTagHandler implements TagHandler {
     public SimpleTemplatePrototype handleContainerTag(String tagName,
             List<Attribute> attributes, List<SimpleTemplatePrototype> elements) {
         Attribute nameAttribute = Attribute.findAttribute("name", attributes);
-        return new SimpleDefineProcessor.Prototype(
+        return new SimpleDefineProcessorPrototype(
                 nameAttribute.getValue().getSymbol(), new SimpleContainerPrototype(elements));
     }
 

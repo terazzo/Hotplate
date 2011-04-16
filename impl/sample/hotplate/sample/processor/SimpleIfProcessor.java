@@ -7,8 +7,6 @@ import sample.hotplate.sample.AbstractSimpleTemplate;
 import sample.hotplate.sample.SimpleNop;
 import sample.hotplate.sample.SimpleTemplate;
 import sample.hotplate.sample.SimpleValue;
-import sample.hotplate.sample.prototype.AbstractSimpleTemplatePrototype;
-import sample.hotplate.sample.prototype.SimpleTemplatePrototype;
 import sample.hotplate.sample.source.SimpleTemplateSource;
 
 public class SimpleIfProcessor extends AbstractSimpleTemplate implements SimpleTemplate {
@@ -54,20 +52,5 @@ public class SimpleIfProcessor extends AbstractSimpleTemplate implements SimpleT
         return String.format("{if condition=%s}%s{/if}", condition, contents);
     }
 
-    public static class Prototype extends AbstractSimpleTemplatePrototype {
-        private final SimpleTemplateSource condition;
-        private final SimpleTemplatePrototype contents;
-        public Prototype(SimpleTemplateSource condition, SimpleTemplatePrototype contents) {
-            super();
-            this.condition = condition;
-            this.contents = contents;
-        }
-        public SimpleTemplate instantiate(
-                Context<Object, SimpleTemplate> lexicalContext) {
-             return new SimpleIfProcessor(
-                     lexicalContext, condition, 
-                     contents.instantiate(lexicalContext));
-        }
-    }
 
 }

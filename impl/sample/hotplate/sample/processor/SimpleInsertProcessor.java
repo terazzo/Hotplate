@@ -5,8 +5,6 @@ import sample.hotplate.core.TemplatePair;
 import sample.hotplate.core.util.TemplatePairUtils;
 import sample.hotplate.sample.AbstractSimpleTemplate;
 import sample.hotplate.sample.SimpleTemplate;
-import sample.hotplate.sample.prototype.AbstractSimpleTemplatePrototype;
-import sample.hotplate.sample.prototype.SimpleTemplatePrototype;
 import sample.hotplate.sample.source.SimpleTemplateSource;
 import sample.hotplate.sample.source.SimpleWrapper;
 
@@ -54,22 +52,6 @@ public class SimpleInsertProcessor extends AbstractSimpleTemplate implements Sim
     }
     public String toString() {
         return String.format("{insert value=%s}%s{/insert}", source, content.toString());
-    }
-
-    public static class Prototype extends AbstractSimpleTemplatePrototype {
-        private final SimpleTemplateSource source;
-        private final SimpleTemplatePrototype contentPrototype;
-        public Prototype(SimpleTemplateSource source, SimpleTemplatePrototype contentPrototype) {
-            super();
-            this.source = source;
-            this.contentPrototype = contentPrototype;
-        }
-        public SimpleTemplate instantiate(
-                Context<Object, SimpleTemplate> lexicalContext) {
-             return new SimpleInsertProcessor(
-                     lexicalContext, source, 
-                     contentPrototype.instantiate(lexicalContext));
-        }
     }
 
 }

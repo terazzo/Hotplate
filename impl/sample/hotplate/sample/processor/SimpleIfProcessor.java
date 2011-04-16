@@ -2,19 +2,22 @@ package sample.hotplate.sample.processor;
 
 import sample.hotplate.core.Context;
 import sample.hotplate.core.TemplatePair;
-import sample.hotplate.core.impl.ProcessorBase;
 import sample.hotplate.core.util.TemplatePairUtils;
+import sample.hotplate.sample.AbstractSimpleTemplate;
 import sample.hotplate.sample.SimpleNop;
 import sample.hotplate.sample.SimpleTemplate;
 import sample.hotplate.sample.SimpleValue;
+import sample.hotplate.sample.prototype.AbstractSimpleTemplatePrototype;
+import sample.hotplate.sample.prototype.SimpleTemplatePrototype;
+import sample.hotplate.sample.source.SimpleTemplateSource;
 
-public class SimpleIfProcessor extends ProcessorBase<Object, SimpleTemplate> implements SimpleTemplate {
+public class SimpleIfProcessor extends AbstractSimpleTemplate implements SimpleTemplate {
 
-    protected final SimpleTemplate condition;
+    protected final SimpleTemplateSource condition;
     protected final SimpleTemplate contents;
 
     public SimpleIfProcessor(Context<Object, SimpleTemplate>lexicalContext,
-            SimpleTemplate condition, SimpleTemplate contents) {
+            SimpleTemplateSource condition, SimpleTemplate contents) {
         super(lexicalContext);
         this.condition = condition;
         this.contents = contents;
@@ -22,7 +25,7 @@ public class SimpleIfProcessor extends ProcessorBase<Object, SimpleTemplate> imp
 
     @Override
     public TemplatePair<Object, SimpleTemplate> doApply(Context<Object, SimpleTemplate> context) {
-        SimpleTemplate result = this.condition.apply(context).template();
+        SimpleTemplate result = this.condition.getTemplate(context);
 
         if (result != null) {
             if (result instanceof SimpleValue) {
@@ -40,6 +43,10 @@ public class SimpleIfProcessor extends ProcessorBase<Object, SimpleTemplate> imp
 
 
     @Override
+    public boolean isReducible() {
+        return true;
+    }
+    @Override
     public String getString() {
         throw new IllegalStateException("Unevaluated if:" + this);
     }
@@ -47,21 +54,19 @@ public class SimpleIfProcessor extends ProcessorBase<Object, SimpleTemplate> imp
         return String.format("{if condition=%s}%s{/if}", condition, contents);
     }
 
-    public static class Prototype extends SimpleProcessorPrototype {
-        private final SimpleTemplate condition;
-        private final SimpleTemplate contents;
-        public Prototype(SimpleTemplate condition, SimpleTemplate contents) {
+    public static class Prototype extends AbstractSimpleTemplatePrototype {
+        private final SimpleTemplateSource condition;
+        private final SimpleTemplatePrototype contents;
+        public Prototype(SimpleTemplateSource condition, SimpleTemplatePrototype contents) {
             super();
             this.condition = condition;
             this.contents = contents;
         }
-        protected SimpleTemplate instantiate(
+        public SimpleTemplate instantiate(
                 Context<Object, SimpleTemplate> lexicalContext) {
              return new SimpleIfProcessor(
-                     lexicalContext, condition, contents);
-        }
-        public String toString() {
-            return String.format("{*if condition=%s}%s{/*if}", condition, contents);
+                     lexicalContext, condition, 
+                     contents.instantiate(lexicalContext));
         }
     }
 

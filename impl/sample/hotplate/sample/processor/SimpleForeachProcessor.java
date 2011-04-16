@@ -6,21 +6,23 @@ import java.util.Collection;
 import sample.hotplate.core.Context;
 import sample.hotplate.core.Symbol;
 import sample.hotplate.core.TemplatePair;
-import sample.hotplate.core.impl.ProcessorBase;
 import sample.hotplate.core.util.ContextUtils;
 import sample.hotplate.core.util.TemplatePairUtils;
+import sample.hotplate.sample.AbstractSimpleTemplate;
 import sample.hotplate.sample.SimpleContainer;
 import sample.hotplate.sample.SimpleTemplate;
 import sample.hotplate.sample.SimpleValue;
+import sample.hotplate.sample.prototype.AbstractSimpleTemplatePrototype;
+import sample.hotplate.sample.prototype.SimpleTemplatePrototype;
+import sample.hotplate.sample.source.SimpleTemplateSource;
 
-public class SimpleForeachProcessor extends ProcessorBase<Object, SimpleTemplate> implements SimpleTemplate {
-
-    protected final SimpleTemplate items;
+public class SimpleForeachProcessor extends AbstractSimpleTemplate implements SimpleTemplate {
+    protected final SimpleTemplateSource items;
     protected final Symbol var;
     protected final SimpleTemplate contents;
 
     public SimpleForeachProcessor(Context<Object, SimpleTemplate>lexicalContext,
-            SimpleTemplate items, Symbol var, SimpleTemplate contents) {
+            SimpleTemplateSource items, Symbol var, SimpleTemplate contents) {
         super(lexicalContext);
         this.items = items;
         this.var = var;
@@ -31,7 +33,7 @@ public class SimpleForeachProcessor extends ProcessorBase<Object, SimpleTemplate
     @Override
     public TemplatePair<Object, SimpleTemplate> doApply(Context<Object, SimpleTemplate> context) {
 
-        SimpleTemplate result = this.items.apply(context).template();
+        SimpleTemplate result = this.items.getTemplate(context);
 
         if (result != null) {
             if (result instanceof SimpleValue) {
@@ -46,7 +48,7 @@ public class SimpleForeachProcessor extends ProcessorBase<Object, SimpleTemplate
                     }
                     
                     return TemplatePairUtils.<Object, SimpleTemplate>pairOf(
-                            new SimpleContainer(elements));
+                            new SimpleContainer(context, elements));
                 }
             }
         }
@@ -56,6 +58,10 @@ public class SimpleForeachProcessor extends ProcessorBase<Object, SimpleTemplate
 
 
     @Override
+    public boolean isReducible() {
+        return true;
+    }
+    @Override
     public String getString() {
         throw new IllegalStateException("Unevaluated foreach:" + this);
     }
@@ -63,24 +69,26 @@ public class SimpleForeachProcessor extends ProcessorBase<Object, SimpleTemplate
         return String.format("{foreach items=%s var=%s}%s{/foreach}", items, var, contents);
     }
 
-    public static class Prototype extends SimpleProcessorPrototype {
-        private final SimpleTemplate items;
+    public static class Prototype extends AbstractSimpleTemplatePrototype {
+        private final SimpleTemplateSource items;
         private final Symbol var;
-        private final SimpleTemplate contents;
-        public Prototype(SimpleTemplate items, Symbol var, SimpleTemplate contents) {
+        private final SimpleTemplatePrototype contents;
+        public Prototype(SimpleTemplateSource items, Symbol var, SimpleTemplatePrototype contents) {
             super();
             this.items = items;
             this.var = var;
             this.contents = contents;
         }
-        protected SimpleTemplate instantiate(
+        public SimpleTemplate instantiate(
                 Context<Object, SimpleTemplate> lexicalContext) {
              return new SimpleForeachProcessor(
-                     lexicalContext, items, var, contents);
+                     lexicalContext, items, var, 
+                     contents.instantiate(lexicalContext));
         }
         public String toString() {
             return String.format("{*foreach items=%s var=%s}%s{/*foreach}", items, var, contents);
         }
     }
+
 
 }

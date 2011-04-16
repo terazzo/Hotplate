@@ -9,10 +9,11 @@ import sample.hotplate.core.TemplatePair;
 import sample.hotplate.core.util.ContextUtils;
 import sample.hotplate.core.util.TemplatePairUtils;
 
-public class SimpleContainer implements SimpleTemplate {
+public class SimpleContainer extends AbstractSimpleTemplate implements SimpleTemplate {
     protected final List<SimpleTemplate> elements;
     private final boolean isReducible;
-    public SimpleContainer(List<SimpleTemplate> elements) {
+    public SimpleContainer(Context<Object, SimpleTemplate> lexicalContext, List<SimpleTemplate> elements) {
+        super(lexicalContext);
         this.elements = Collections.unmodifiableList(elements);
         for (SimpleTemplate element : elements) {
             if (element.isReducible()) {
@@ -28,7 +29,8 @@ public class SimpleContainer implements SimpleTemplate {
     }
 
     @Override
-    public TemplatePair<Object, SimpleTemplate> apply(Context<Object, SimpleTemplate> context) {
+    protected TemplatePair<Object, SimpleTemplate> doApply(
+            Context<Object, SimpleTemplate> context) {
         if (!isReducible()) {
             return TemplatePairUtils.<Object, SimpleTemplate>pairOf(this);
         }
@@ -41,7 +43,7 @@ public class SimpleContainer implements SimpleTemplate {
             newElements.add(applied.template());
             newContext = ContextUtils.merge(applied.context(), newContext);
         }
-        return TemplatePairUtils.pairOf(new SimpleContainer(newElements), newContext);
+        return TemplatePairUtils.pairOf(new SimpleContainer(context, newElements), newContext);
     }
 
     @Override
@@ -51,5 +53,12 @@ public class SimpleContainer implements SimpleTemplate {
             containerContents.append(element.getString());
         }
         return containerContents.toString();
+    }
+    private static SimpleTemplate nop =
+        new SimpleContainer(
+                ContextUtils.<Object, SimpleTemplate>emptyContext(),
+                Collections.<SimpleTemplate>emptyList());
+    public static SimpleTemplate nop() {
+        return nop;
     }
 }

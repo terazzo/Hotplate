@@ -2,13 +2,13 @@ package sample.hotplate.sample.parser.handler;
 
 import java.util.List;
 
-import sample.hotplate.sample.SimpleContainer;
-import sample.hotplate.sample.SimpleTemplate;
 import sample.hotplate.sample.parser.Attribute;
 import sample.hotplate.sample.parser.TagHandler;
 import sample.hotplate.sample.processor.SimpleIfProcessor;
+import sample.hotplate.sample.prototype.SimpleContainerPrototype;
+import sample.hotplate.sample.prototype.SimpleTemplatePrototype;
 
-public class IfTagHandler implements TagHandler<Object, SimpleTemplate>{
+public class IfTagHandler implements TagHandler {
     @Override
     public String[] tagNames() {
         return new String[] {"if"};
@@ -22,18 +22,18 @@ public class IfTagHandler implements TagHandler<Object, SimpleTemplate>{
         return false;
     }
     @Override
-    public SimpleTemplate handleSingleTag(String tagName,
+    public SimpleTemplatePrototype handleSingleTag(String tagName,
             List<Attribute> attributes) {
         throw new IllegalStateException("If cannot use as a single tag.");
     }
 
     @Override
-    public SimpleTemplate handleContainerTag(String tagName,
-            List<Attribute> attributes, List<SimpleTemplate> elements) {
+    public SimpleTemplatePrototype handleContainerTag(String tagName,
+            List<Attribute> attributes, List<SimpleTemplatePrototype> elements) {
         Attribute conditionAttribute = Attribute.findAttribute("condition", attributes);
         return new SimpleIfProcessor.Prototype(
                 TagHandlerUtils.valueSource(conditionAttribute), 
-                new SimpleContainer(elements));
+                new SimpleContainerPrototype(elements));
     }
 
 }

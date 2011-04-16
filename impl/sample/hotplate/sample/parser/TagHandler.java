@@ -2,12 +2,12 @@ package sample.hotplate.sample.parser;
 
 import java.util.List;
 
-import sample.hotplate.core.Template;
+import sample.hotplate.sample.prototype.SimpleTemplatePrototype;
 
-public interface TagHandler<V, T extends Template<V, T>> {
+public interface TagHandler {
     String[] tagNames();
     boolean requireContainerTag();
     boolean requireSingleTag();
-    T handleSingleTag(String tagName, List<Attribute> attributes);
-    T handleContainerTag(String tagName, List<Attribute> attributes, List<T> elements);
+    SimpleTemplatePrototype handleSingleTag(String tagName, List<Attribute> attributes);
+    SimpleTemplatePrototype handleContainerTag(String tagName, List<Attribute> attributes, List<SimpleTemplatePrototype> elements);
 }

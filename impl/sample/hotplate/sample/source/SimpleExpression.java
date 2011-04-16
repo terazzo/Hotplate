@@ -1,4 +1,4 @@
-package sample.hotplate.sample;
+package sample.hotplate.sample.source;
 
 import org.mvel2.MVEL;
 import org.mvel2.PropertyAccessException;
@@ -8,10 +8,10 @@ import org.mvel2.integration.impl.SimpleValueResolver;
 
 import sample.hotplate.core.Context;
 import sample.hotplate.core.Symbol;
-import sample.hotplate.core.TemplatePair;
-import sample.hotplate.core.util.TemplatePairUtils;
+import sample.hotplate.sample.SimpleTemplate;
+import sample.hotplate.sample.SimpleValue;
 
-public class SimpleExpression implements SimpleTemplate {
+public class SimpleExpression implements SimpleTemplateSource {
 
     private String expression;
     public SimpleExpression(String expression) {
@@ -21,17 +21,13 @@ public class SimpleExpression implements SimpleTemplate {
         return true;
     }
     @Override
-    public String getString() {
-        throw new IllegalStateException("Unevaluated expression:" + expression);
-    }
-    @Override
-    public TemplatePair<Object, SimpleTemplate> apply(Context<Object, SimpleTemplate> context) {
+    public SimpleTemplate getTemplate(Context<Object, SimpleTemplate> context) {
         try {
             Object value = evaluate(context);
-            return TemplatePairUtils.<Object, SimpleTemplate>pairOf(new SimpleValue(value));
+            return new SimpleValue(value);
         } catch (PropertyAccessException e) {
             e.printStackTrace();
-            return TemplatePairUtils.<Object, SimpleTemplate>pairOf(this);
+            return null;
         }
     }
     private Object evaluate(Context<Object, SimpleTemplate> context) {
@@ -82,6 +78,5 @@ public class SimpleExpression implements SimpleTemplate {
 
         
     }
-
 
 }

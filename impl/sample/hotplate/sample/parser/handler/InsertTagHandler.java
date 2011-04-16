@@ -1,15 +1,15 @@
 package sample.hotplate.sample.parser.handler;
 
+import java.util.Collections;
 import java.util.List;
 
-import sample.hotplate.sample.SimpleContainer;
-import sample.hotplate.sample.SimpleNop;
-import sample.hotplate.sample.SimpleTemplate;
 import sample.hotplate.sample.parser.Attribute;
 import sample.hotplate.sample.parser.TagHandler;
 import sample.hotplate.sample.processor.SimpleInsertProcessor;
+import sample.hotplate.sample.prototype.SimpleContainerPrototype;
+import sample.hotplate.sample.prototype.SimpleTemplatePrototype;
 
-public class InsertTagHandler implements TagHandler<Object, SimpleTemplate>{
+public class InsertTagHandler implements TagHandler {
     @Override
     public String[] tagNames() {
         return new String[] {"insert"};
@@ -23,21 +23,21 @@ public class InsertTagHandler implements TagHandler<Object, SimpleTemplate>{
         return true;
     }
     @Override
-    public SimpleTemplate handleSingleTag(String tagName,
+    public SimpleTemplatePrototype handleSingleTag(String tagName,
             List<Attribute> attributes) {
         Attribute valueAttribute = Attribute.findAttribute("value", attributes);
         return new SimpleInsertProcessor.Prototype(
                 TagHandlerUtils.valueSource(valueAttribute),
-                new SimpleNop());
+                new SimpleContainerPrototype(Collections.<SimpleTemplatePrototype>emptyList()));
     }
 
     @Override
-    public SimpleTemplate handleContainerTag(String tagName,
-            List<Attribute> attributes, List<SimpleTemplate> elements) {
+    public SimpleTemplatePrototype handleContainerTag(String tagName,
+            List<Attribute> attributes, List<SimpleTemplatePrototype> elements) {
         Attribute valueAttribute = Attribute.findAttribute("value", attributes);
         return new SimpleInsertProcessor.Prototype(
                 TagHandlerUtils.valueSource(valueAttribute), 
-                new SimpleContainer(elements));
+                new SimpleContainerPrototype(elements));
     }
 
 }

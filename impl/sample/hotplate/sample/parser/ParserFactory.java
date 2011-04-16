@@ -10,11 +10,11 @@ import org.codehaus.jparsec.Parsers;
 import org.codehaus.jparsec.Terminals;
 import org.junit.Test;
 
-import sample.hotplate.sample.SimpleTemplate;
 import sample.hotplate.sample.parser.handler.DefineTagHandler;
 import sample.hotplate.sample.parser.handler.ForeachTagHandler;
 import sample.hotplate.sample.parser.handler.IfTagHandler;
 import sample.hotplate.sample.parser.handler.InsertTagHandler;
+import sample.hotplate.sample.prototype.SimpleTemplatePrototype;
 
 
 public final class ParserFactory {
@@ -22,13 +22,13 @@ public final class ParserFactory {
     public static final Terminals endBrace = Terminals.operators("}");
     public static final Terminals operators = Terminals.operators("/", "=");
     public static final String LITERAL_NAME = "TEXT";
-    public static final Parser<SimpleTemplate>
+    public static final Parser<SimpleTemplatePrototype>
         literalParser = TemplateParsers.makeLiteralParser();
 
     public static final ParserFactory instance = new ParserFactory();
     
-    private java.util.Map<String, TagHandler<Object, SimpleTemplate>>
-        handlers = new LinkedHashMap<String, TagHandler<Object,SimpleTemplate>>();
+    private java.util.Map<String, TagHandler>
+        handlers = new LinkedHashMap<String, TagHandler>();
     
     
     public ParserFactory() {
@@ -41,35 +41,35 @@ public final class ParserFactory {
         registerHandler(new IfTagHandler());
         registerHandler(new ForeachTagHandler());
     }
-    public synchronized void registerHandler(TagHandler<Object, SimpleTemplate> handler) {
+    public synchronized void registerHandler(TagHandler handler) {
         for (String tagName : handler.tagNames()) {
             handlers.put(tagName, handler);            
         }
     }
 
     @Test
-    public Parser<List<SimpleTemplate>> newParser() {
+    public Parser<List<SimpleTemplatePrototype>> newParser() {
         String[] processorNames = handlers.keySet().toArray(new String[0]);
         Terminals tags = Terminals.caseSensitive(new String[0], processorNames);
             
-        Reference<List<SimpleTemplate>> parserRef = Parser.newReference();
+        Reference<List<SimpleTemplatePrototype>> parserRef = Parser.newReference();
         
-        List<Parser<SimpleTemplate>> parsers = new ArrayList<Parser<SimpleTemplate>>();
+        List<Parser<SimpleTemplatePrototype>> parsers = new ArrayList<Parser<SimpleTemplatePrototype>>();
         parsers.addAll(makeTagParses(tags, parserRef));
         parsers.add(literalParser);
         
-        Parser<List<SimpleTemplate>> parser = Parsers.or(parsers).many();
+        Parser<List<SimpleTemplatePrototype>> parser = Parsers.or(parsers).many();
         parserRef.set(parser);
 
         return parser.from(Tokenizers.newTokenizer(tags));
     }
 
-    private List<Parser<SimpleTemplate>> makeTagParses(
-            Terminals tags, Reference<List<SimpleTemplate>> parserRef) {
+    private List<Parser<SimpleTemplatePrototype>> makeTagParses(
+            Terminals tags, Reference<List<SimpleTemplatePrototype>> parserRef) {
 
-        List<Parser<SimpleTemplate>> tagParsers = new ArrayList<Parser<SimpleTemplate>>();
+        List<Parser<SimpleTemplatePrototype>> tagParsers = new ArrayList<Parser<SimpleTemplatePrototype>>();
         for (String tagName: handlers.keySet()) {
-            TagHandler<Object,SimpleTemplate> handler = handlers.get(tagName);
+            TagHandler handler = handlers.get(tagName);
             if (handler.requireContainerTag()) {
                 tagParsers.add(
                     TemplateParsers.makeContainerTagParser(tags, parserRef.lazy(), tagName, handler));

@@ -2,14 +2,14 @@ package sample.hotplate.sample.parser.handler;
 
 
 import sample.hotplate.core.Symbol;
-import sample.hotplate.sample.SimpleExpression;
-import sample.hotplate.sample.SimpleReference;
-import sample.hotplate.sample.SimpleTemplate;
 import sample.hotplate.sample.parser.Attribute;
+import sample.hotplate.sample.source.SimpleExpression;
+import sample.hotplate.sample.source.SimpleReference;
+import sample.hotplate.sample.source.SimpleTemplateSource;
 
 public final class TagHandlerUtils {
-    public static SimpleTemplate valueSource(Attribute valueAttribute) {
-        final SimpleTemplate value;
+    public static SimpleTemplateSource valueSource(Attribute valueAttribute) {
+        final SimpleTemplateSource value;
         if (valueAttribute.getValue().isSymbol()) {
             Symbol symbol = valueAttribute.getValue().getSymbol();
             value = new SimpleReference(symbol);

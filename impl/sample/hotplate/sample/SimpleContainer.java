@@ -54,11 +54,4 @@ public class SimpleContainer extends AbstractSimpleTemplate implements SimpleTem
         }
         return containerContents.toString();
     }
-    private static SimpleTemplate nop =
-        new SimpleContainer(
-                ContextUtils.<Object, SimpleTemplate>emptyContext(),
-                Collections.<SimpleTemplate>emptyList());
-    public static SimpleTemplate nop() {
-        return nop;
-    }
 }

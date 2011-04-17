@@ -4,12 +4,12 @@ import sample.hotplate.core.Context;
 import sample.hotplate.sample.SimpleTemplate;
 import sample.hotplate.sample.processor.SimpleInsertProcessor;
 import sample.hotplate.sample.prototype.SimpleTemplatePrototype;
-import sample.hotplate.sample.source.SimpleTemplateSource;
+import sample.hotplate.sample.source.SimpleSource;
 
 public class SimpleInsertProcessorPrototype implements SimpleTemplatePrototype {
-    private final SimpleTemplateSource source;
+    private final SimpleSource source;
     private final SimpleTemplatePrototype contentPrototype;
-    public SimpleInsertProcessorPrototype(SimpleTemplateSource source, SimpleTemplatePrototype contentPrototype) {
+    public SimpleInsertProcessorPrototype(SimpleSource source, SimpleTemplatePrototype contentPrototype) {
         super();
         this.source = source;
         this.contentPrototype = contentPrototype;

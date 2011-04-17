@@ -1,20 +1,21 @@
 package sample.hotplate.sample.processor;
 
+import sample.hotplate.core.Associable;
 import sample.hotplate.core.Context;
 import sample.hotplate.core.TemplatePair;
 import sample.hotplate.core.util.TemplatePairUtils;
 import sample.hotplate.sample.AbstractSimpleTemplate;
 import sample.hotplate.sample.SimpleTemplate;
-import sample.hotplate.sample.source.SimpleTemplateSource;
+import sample.hotplate.sample.source.SimpleSource;
 import sample.hotplate.sample.source.SimpleWrapper;
 
 public class SimpleInsertProcessor extends AbstractSimpleTemplate implements SimpleTemplate {
 
-    protected final SimpleTemplateSource source;
+    protected final SimpleSource source;
     protected final SimpleTemplate content;
 
     public SimpleInsertProcessor(Context<Object, SimpleTemplate>lexicalContext,
-            SimpleTemplateSource source, SimpleTemplate content) {
+            SimpleSource source, SimpleTemplate content) {
         super(lexicalContext);
         this.source = source;
         this.content = content;
@@ -22,16 +23,17 @@ public class SimpleInsertProcessor extends AbstractSimpleTemplate implements Sim
 
     @Override
     public TemplatePair<Object, SimpleTemplate> doApply(Context<Object, SimpleTemplate> context) {
-        SimpleTemplateSource source = this.source;
+        SimpleSource source = this.source;
         SimpleTemplate content = this.content;
 
-        SimpleTemplate value = this.source.getTemplate(context);
+        Associable<Object, SimpleTemplate> associable = this.source.getAssociable(context);
 
-        if (value != null) {
+        if (associable != null) {
+            SimpleTemplate template = associable.asTemplate();
             Context<Object, SimpleTemplate> argumentContext =
                 content.apply(context).context();
     
-            TemplatePair<Object, SimpleTemplate> result = value.apply(argumentContext);
+            TemplatePair<Object, SimpleTemplate> result = template.apply(argumentContext);
 
             if (!result.template().isReducible()) {
                 return TemplatePairUtils.pairOf(result.template());

@@ -5,13 +5,13 @@ import sample.hotplate.core.Symbol;
 import sample.hotplate.sample.SimpleTemplate;
 import sample.hotplate.sample.processor.SimpleForeachProcessor;
 import sample.hotplate.sample.prototype.SimpleTemplatePrototype;
-import sample.hotplate.sample.source.SimpleTemplateSource;
+import sample.hotplate.sample.source.SimpleSource;
 
 public class SimpleForeachProcessorPrototype implements SimpleTemplatePrototype {
-    private final SimpleTemplateSource items;
+    private final SimpleSource items;
     private final Symbol var;
     private final SimpleTemplatePrototype contents;
-    public SimpleForeachProcessorPrototype(SimpleTemplateSource items, Symbol var, SimpleTemplatePrototype contents) {
+    public SimpleForeachProcessorPrototype(SimpleSource items, Symbol var, SimpleTemplatePrototype contents) {
         super();
         this.items = items;
         this.var = var;

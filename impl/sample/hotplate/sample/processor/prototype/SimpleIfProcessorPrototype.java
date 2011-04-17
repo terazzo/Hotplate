@@ -4,12 +4,12 @@ import sample.hotplate.core.Context;
 import sample.hotplate.sample.SimpleTemplate;
 import sample.hotplate.sample.processor.SimpleIfProcessor;
 import sample.hotplate.sample.prototype.SimpleTemplatePrototype;
-import sample.hotplate.sample.source.SimpleTemplateSource;
+import sample.hotplate.sample.source.SimpleSource;
 
 public class SimpleIfProcessorPrototype implements SimpleTemplatePrototype {
-    private final SimpleTemplateSource condition;
+    private final SimpleSource condition;
     private final SimpleTemplatePrototype contents;
-    public SimpleIfProcessorPrototype(SimpleTemplateSource condition, SimpleTemplatePrototype contents) {
+    public SimpleIfProcessorPrototype(SimpleSource condition, SimpleTemplatePrototype contents) {
         super();
         this.condition = condition;
         this.contents = contents;

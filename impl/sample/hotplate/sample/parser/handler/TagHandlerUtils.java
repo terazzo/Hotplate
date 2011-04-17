@@ -5,11 +5,11 @@ import sample.hotplate.core.Symbol;
 import sample.hotplate.sample.parser.Attribute;
 import sample.hotplate.sample.source.SimpleExpression;
 import sample.hotplate.sample.source.SimpleReference;
-import sample.hotplate.sample.source.SimpleTemplateSource;
+import sample.hotplate.sample.source.SimpleSource;
 
 public final class TagHandlerUtils {
-    public static SimpleTemplateSource makeSource(Attribute attribute) {
-        final SimpleTemplateSource source;
+    public static SimpleSource makeSource(Attribute attribute) {
+        final SimpleSource source;
         if (attribute.getValue().isSymbol()) {
             Symbol symbol = attribute.getValue().getSymbol();
             source = new SimpleReference(symbol);

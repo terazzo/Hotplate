@@ -2,6 +2,7 @@ package sample.hotplate.sample;
 
 import sample.hotplate.core.Context;
 import sample.hotplate.core.TemplatePair;
+import sample.hotplate.core.Value;
 import sample.hotplate.core.util.ContextUtils;
 
 
@@ -18,4 +19,16 @@ public abstract class AbstractSimpleTemplate implements SimpleTemplate {
     }
 
     protected abstract TemplatePair<Object, SimpleTemplate> doApply(Context<Object, SimpleTemplate> context);
+    @Override
+    public boolean isTemplate() {
+        return true;
+    }
+    @Override
+    public Value<Object, SimpleTemplate> asValue() {
+        return new SimpleValue(this);
+    }
+    @Override
+    public SimpleTemplate asTemplate() {
+        return this;
+    }
 }

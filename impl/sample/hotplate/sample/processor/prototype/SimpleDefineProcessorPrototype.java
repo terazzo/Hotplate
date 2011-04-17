@@ -4,12 +4,12 @@ import sample.hotplate.core.Symbol;
 import sample.hotplate.sample.SimpleTemplate;
 import sample.hotplate.sample.processor.SimpleDefineProcessor;
 import sample.hotplate.sample.prototype.SimpleTemplatePrototype;
-import sample.hotplate.sample.source.SimpleTemplateSource;
+import sample.hotplate.sample.source.SimpleSource;
 
 public class SimpleDefineProcessorPrototype implements SimpleTemplatePrototype {
     private Symbol symbol;
-    private SimpleTemplateSource source;
-    public SimpleDefineProcessorPrototype(Symbol symbol, SimpleTemplateSource source) {
+    private SimpleSource source;
+    public SimpleDefineProcessorPrototype(Symbol symbol, SimpleSource source) {
         super();
         this.symbol = symbol;
         this.source = source;

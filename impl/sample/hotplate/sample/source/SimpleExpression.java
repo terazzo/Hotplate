@@ -6,12 +6,13 @@ import org.mvel2.integration.VariableResolver;
 import org.mvel2.integration.impl.BaseVariableResolverFactory;
 import org.mvel2.integration.impl.SimpleValueResolver;
 
+import sample.hotplate.core.Associable;
 import sample.hotplate.core.Context;
 import sample.hotplate.core.Symbol;
 import sample.hotplate.sample.SimpleTemplate;
 import sample.hotplate.sample.SimpleValue;
 
-public class SimpleExpression implements SimpleTemplateSource {
+public class SimpleExpression implements SimpleSource {
 
     private String expression;
     public SimpleExpression(String expression) {
@@ -20,11 +21,15 @@ public class SimpleExpression implements SimpleTemplateSource {
     public boolean isReducible() {
         return true;
     }
+    @SuppressWarnings("unchecked")
     @Override
-    public SimpleTemplate getTemplate(Context<Object, SimpleTemplate> context) {
+    public Associable<Object, SimpleTemplate> getAssociable(Context<Object, SimpleTemplate> context) {
         try {
             Object value = evaluate(context);
-            return new SimpleValue(value);
+            if (!(value instanceof SimpleTemplate)) {
+                value = new SimpleValue(value);
+            }
+            return (Associable<Object, SimpleTemplate>) value;
         } catch (PropertyAccessException e) {
             e.printStackTrace();
             return null;
@@ -47,10 +52,9 @@ public class SimpleExpression implements SimpleTemplateSource {
 
         @Override
         public VariableResolver getVariableResolver(String name) {
-            SimpleTemplate template = context.get(Symbol.of(name));
-            if (template != null && template instanceof SimpleValue) {
-                Object value = ((SimpleValue) template).value();
-                return new SimpleValueResolver(value);
+            Associable<Object, SimpleTemplate> value = context.get(Symbol.of(name));
+            if (value != null) {
+                return new SimpleValueResolver(value.asValue().value());
             } else {
                 return null;
             }

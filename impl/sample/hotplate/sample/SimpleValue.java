@@ -1,29 +1,27 @@
 package sample.hotplate.sample;
 
-import sample.hotplate.core.Context;
-import sample.hotplate.core.TemplatePair;
-import sample.hotplate.core.util.TemplatePairUtils;
+import sample.hotplate.core.Value;
 
-public class SimpleValue implements SimpleTemplate {
+public class SimpleValue implements Value<Object, SimpleTemplate> {
 
     private Object value;
     public SimpleValue(Object value) {
         this.value = value;
     }
-    public boolean isReducible() {
-        return false;
-    }
     public Object value() {
         return value;
     }
     @Override
-    public String getString() {
-        return value.toString();
+    public boolean isTemplate() {
+        return false;
     }
-    public TemplatePair<Object, SimpleTemplate> apply(Context<Object, SimpleTemplate> context) {
-        return TemplatePairUtils.<Object, SimpleTemplate>pairOf(this);
+    @Override
+    public Value<Object, SimpleTemplate> asValue() {
+        return this;
     }
-
-
+    @Override
+    public SimpleTemplate asTemplate() {
+        return new SimpleLiteral(value);
+    }
 
 }

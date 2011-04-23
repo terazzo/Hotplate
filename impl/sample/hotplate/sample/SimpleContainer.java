@@ -9,7 +9,7 @@ import sample.hotplate.core.TemplatePair;
 import sample.hotplate.core.util.ContextUtils;
 import sample.hotplate.core.util.TemplatePairUtils;
 
-public class SimpleContainer extends AbstractSimpleTemplate implements SimpleTemplate {
+public class SimpleContainer implements SimpleTemplate {
     protected final List<SimpleTemplate> elements;
     private final boolean isReducible;
     public SimpleContainer(List<SimpleTemplate> elements) {

@@ -2,9 +2,6 @@ package sample.hotplate.sample;
 
 import static org.junit.Assert.assertEquals;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import org.junit.Test;
 
 import sample.hotplate.core.Context;
@@ -120,7 +117,7 @@ public class SimpleCompilerTest {
         Context<Object, SimpleTemplate> context1 =
             new ContextBuilder<Object, SimpleTemplate>()
             .put(Symbol.of("raitenonrei"), translator.toTemplate(
-                "{insert value=header}{define name=title value=\"'ヘッダ'\"/}{/insert}\n{insert value=raitenbi/}にはご来店いただき、\nまことにありがとうございます。"))
+                "{insert value=header}{define name=title value=\"ヘッダ\"/}{/insert}\n{insert value=raitenbi/}にはご来店いただき、\nまことにありがとうございます。"))
             .context();
         SimpleTemplate applied = template.apply(context1).template();
         System.out.println("-------");
@@ -167,7 +164,7 @@ public class SimpleCompilerTest {
 
        SimpleTemplate page = translator.toTemplate("" +
                "{insert value=layout}\n" +
-               "{define name=title value=\"'アンケートフォーム'\"/}\n" + 
+               "{define name=title value=\"アンケートフォーム\"/}\n" + 
                "{define name=contentBody}\n" + 
                "ご意見・ご要望がある方はどうぞ。<br>\n" + 
                "<form action=\"#\">\n" + 
@@ -222,7 +219,7 @@ public class SimpleCompilerTest {
 
        SimpleTemplate page = translator.toTemplate("" +
                "{insert value=layout}\n" +
-               "{define name=title value=\"'アンケートフォーム'\"/}\n" + 
+               "{define name=title value=\"アンケートフォーム\"/}\n" + 
                "{define name=contentBody}\n" + 
                "{insert value=message/}<br>\n" + 
                "<form action=\"#\">\n" + 
@@ -253,86 +250,5 @@ public class SimpleCompilerTest {
        public String firstName;
        public String lastName;
        public boolean isMember;
-   }
-   @Test
-   public void testIf() {
-       Customer customer = new Customer();
-       customer.firstName = "トン吉";
-       customer.isMember = true;
-       
-       Context<Object, SimpleTemplate> context =
-           new ContextBuilder<Object, SimpleTemplate>()
-           .put(Symbol.of("customer"), new SimpleValue(customer))
-           .context();
-
-       SimpleTranslator translator = new SimpleTranslator();
-       SimpleTemplate template = translator.toTemplate("" +
-           "{if condition=\"customer.isMember\"}" +
-           "ようこそ、会員{insert value=\"customer.firstName\"/}" + 
-           "{/if}" +
-       "");
-       String output = 
-           translator.fromTemplate(template.apply(context).template());
-       System.out.println(output);
-       String expected = "ようこそ、会員トン吉";
-       assertEquals(expected, output);
-   }
-   @Test
-   public void testForeach() {
-       List<Customer> customers = new ArrayList<Customer>();
-       customers.add(new Customer(){{firstName="hoge";}});
-       customers.add(new Customer(){{firstName="fuga";}});
-       customers.add(new Customer(){{firstName="hige";}});
-       
-       Context<Object, SimpleTemplate> context =
-           new ContextBuilder<Object, SimpleTemplate>()
-           .put(Symbol.of("customers"), new SimpleValue(customers))
-           .context();
-
-       SimpleTranslator translator = new SimpleTranslator();
-       SimpleTemplate template = translator.toTemplate("" +
-           "{foreach items=\"customers\" var=customer}" +
-           "{insert value=\"customer.firstName\"/}、" + 
-           "{/foreach}" +
-       "");
-       String output = 
-           translator.fromTemplate(template.apply(context).template());
-       System.out.println(output);
-       String expected = "hoge、fuga、hige、";
-       assertEquals(expected, output);
-   }
-   @Test
-   public void testFib() {
-       SimpleTranslator translator = new SimpleTranslator();
-       SimpleTemplate template = translator.toTemplate("" +
-           "{define name=fib}" +
-           "{if condition=\"i==0\"}{/if}" +
-           "{if condition=\"i==1\"}*{/if}" +
-           "{if condition=\"i>=2\"}" +
-               "{insert value=fib}" +
-                   "{define name=i value=\"i-1\"/}" +
-                   "{define name=fib value=fib/}" +
-               "{/insert}" +
-                   "{insert value=fib}" +
-                   "{define name=i value=\"i-2\"/}" +
-                   "{define name=fib value=fib/}" +
-               "{/insert}" +
-           "{/if}" +
-           "{/define}" +
-           "{insert value=fib}" + 
-               "{define name=i value=count/}" +
-               "{define name=fib value=fib/}" +
-           "{/insert}" +
-       "");
-       Context<Object, SimpleTemplate> context =
-           new ContextBuilder<Object, SimpleTemplate>()
-           .put(Symbol.of("count"), new SimpleValue(5))
-           .context();
-
-       String output = 
-           translator.fromTemplate(template.apply(context).template());
-       System.out.println(output);
-       String expected = "*****";
-       assertEquals(expected, output);
    }
 }

@@ -3,7 +3,7 @@ package sample.hotplate.sample.parser.handler;
 
 import sample.hotplate.core.Symbol;
 import sample.hotplate.sample.parser.Attribute;
-import sample.hotplate.sample.source.SimpleExpression;
+import sample.hotplate.sample.prototype.SimpleLiteralPrototype;
 import sample.hotplate.sample.source.SimpleReference;
 import sample.hotplate.sample.source.SimpleSource;
 
@@ -15,7 +15,7 @@ public final class TagHandlerUtils {
             source = new SimpleReference(symbol);
         } else {
             final String expression = attribute.getValue().getExpression();
-            source = new SimpleExpression(expression);
+            source = new SimpleLiteralPrototype(expression);
         }
         return source;
     }

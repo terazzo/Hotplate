@@ -1,16 +1,14 @@
 package sample.hotplate.sample.processor;
 
-import sample.hotplate.core.Associable;
 import sample.hotplate.core.Context;
 import sample.hotplate.core.TemplatePair;
 import sample.hotplate.core.util.ContextUtils;
 import sample.hotplate.core.util.TemplatePairUtils;
-import sample.hotplate.sample.AbstractSimpleTemplate;
 import sample.hotplate.sample.SimpleTemplate;
 import sample.hotplate.sample.source.SimpleSource;
 import sample.hotplate.sample.source.SimpleWrapper;
 
-public class SimpleInsertProcessor extends AbstractSimpleTemplate implements SimpleTemplate {
+public class SimpleInsertProcessor implements SimpleTemplate {
 
     protected final SimpleSource source;
     protected final SimpleTemplate content;
@@ -30,10 +28,9 @@ public class SimpleInsertProcessor extends AbstractSimpleTemplate implements Sim
         SimpleSource source = this.source;
         SimpleTemplate content = this.content;
 
-        Associable<Object, SimpleTemplate> associable = this.source.getAssociable(merged);
+        SimpleTemplate template = this.source.getTemplate(merged);
 
-        if (associable != null) {
-            SimpleTemplate template = associable.asTemplate();
+        if (template != null) {
             Context<Object, SimpleTemplate> argumentContext = content.apply(context).context();
     
             TemplatePair<Object, SimpleTemplate> result = template.apply(argumentContext);

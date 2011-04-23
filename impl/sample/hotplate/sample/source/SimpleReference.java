@@ -1,6 +1,5 @@
 package sample.hotplate.sample.source;
 
-import sample.hotplate.core.Associable;
 import sample.hotplate.core.Context;
 import sample.hotplate.core.Symbol;
 import sample.hotplate.sample.SimpleTemplate;
@@ -15,7 +14,7 @@ public class SimpleReference implements SimpleSource {
     }
 
     @Override
-    public Associable<Object, SimpleTemplate> getAssociable(Context<Object, SimpleTemplate> context) {
+    public SimpleTemplate getTemplate(Context<Object, SimpleTemplate> context) {
         return context.get(symbol);
     }
 

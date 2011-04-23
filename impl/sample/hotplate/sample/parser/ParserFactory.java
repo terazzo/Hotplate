@@ -12,8 +12,6 @@ import org.codehaus.jparsec.Terminals;
 import org.codehaus.jparsec.Token;
 
 import sample.hotplate.sample.parser.handler.DefineTagHandler;
-import sample.hotplate.sample.parser.handler.ForeachTagHandler;
-import sample.hotplate.sample.parser.handler.IfTagHandler;
 import sample.hotplate.sample.parser.handler.InsertTagHandler;
 import sample.hotplate.sample.prototype.SimpleTemplatePrototype;
 
@@ -36,8 +34,6 @@ public final class ParserFactory {
     private void registerHandlers() {
         registerHandler(new DefineTagHandler());
         registerHandler(new InsertTagHandler());
-        registerHandler(new IfTagHandler());
-        registerHandler(new ForeachTagHandler());
     }
     public synchronized void registerHandler(TagHandler handler) {
         for (String tagName : handler.tagNames()) {

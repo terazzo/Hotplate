@@ -4,7 +4,7 @@ import sample.hotplate.core.Context;
 import sample.hotplate.core.TemplatePair;
 import sample.hotplate.core.util.TemplatePairUtils;
 
-public class SimpleNop extends AbstractSimpleTemplate implements SimpleTemplate {
+public class SimpleNop implements SimpleTemplate {
 
     public SimpleNop() {
         super();

@@ -4,7 +4,7 @@ import sample.hotplate.core.Context;
 import sample.hotplate.core.TemplatePair;
 import sample.hotplate.core.util.TemplatePairUtils;
 
-public class SimpleLiteral extends AbstractSimpleTemplate implements SimpleTemplate {
+public class SimpleLiteral implements SimpleTemplate {
 
 	private Object value;
     public SimpleLiteral(Object value) {

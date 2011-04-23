@@ -3,21 +3,20 @@ package sample.hotplate.core.util;
 import java.util.HashMap;
 import java.util.Map;
 
-import sample.hotplate.core.Associable;
 import sample.hotplate.core.Context;
 import sample.hotplate.core.Symbol;
 import sample.hotplate.core.Template;
 
 public class ContextBuilder<V, T extends Template<V, T>> {
-    private final Map<Symbol, Associable<V, T>> scope;
+    private final Map<Symbol, T> scope;
     public ContextBuilder() {
-        this.scope = new HashMap<Symbol, Associable<V, T>>();
+        this.scope = new HashMap<Symbol, T>();
     }
-    private ContextBuilder(Map<Symbol, Associable<V, T>> scope) {
+    private ContextBuilder(Map<Symbol, T> scope) {
         this.scope = scope;
     }
-    public ContextBuilder<V, T> put(Symbol symbol, Associable<V, T> value) {
-        HashMap<Symbol, Associable<V, T>> newScope = new HashMap<Symbol, Associable<V, T>>(scope);
+    public ContextBuilder<V, T> put(Symbol symbol, T value) {
+        HashMap<Symbol, T> newScope = new HashMap<Symbol, T>(scope);
         newScope.put(symbol, value);
         return new ContextBuilder<V, T>(newScope);
     }
@@ -26,12 +25,12 @@ public class ContextBuilder<V, T extends Template<V, T>> {
     }
     
     private static class ContextImpl<V, T extends Template<V, T>> implements Context<V, T> {
-        private final Map<Symbol, Associable<V, T>> scope;
-        private ContextImpl(Map<Symbol, Associable<V, T>> scope) {
+        private final Map<Symbol, T> scope;
+        private ContextImpl(Map<Symbol, T> scope) {
             this.scope = scope;
         }
         @Override
-        public Associable<V, T> get(Symbol symbol) {
+        public T get(Symbol symbol) {
             return scope.get(symbol);
         }
     }

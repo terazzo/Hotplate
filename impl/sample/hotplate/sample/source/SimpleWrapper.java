@@ -10,7 +10,7 @@ public class SimpleWrapper implements SimpleSource {
     }
 
     @Override
-    public SimpleTemplate getAssociable(Context<Object, SimpleTemplate> context) {
+    public SimpleTemplate getTemplate(Context<Object, SimpleTemplate> context) {
         return content;
     }
 }

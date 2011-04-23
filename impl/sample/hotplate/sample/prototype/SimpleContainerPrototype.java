@@ -26,7 +26,7 @@ public class SimpleContainerPrototype
         return new SimpleContainer(tempalteElements);
     }
     @Override
-    public SimpleTemplate getAssociable(Context<Object, SimpleTemplate> context) {
+    public SimpleTemplate getTemplate(Context<Object, SimpleTemplate> context) {
         return instantiate(context);
     }
 }

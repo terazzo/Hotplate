@@ -1,6 +1,5 @@
 package sample.hotplate.core.util;
 
-import sample.hotplate.core.Associable;
 import sample.hotplate.core.Context;
 import sample.hotplate.core.Symbol;
 import sample.hotplate.core.Template;
@@ -9,9 +8,9 @@ public final class ContextUtils {
     private ContextUtils() {
     }
     public static <V, T extends Template<V, T>> Context<V, T>
-        newContext(final Symbol symbol, final Associable<V, T> value) {
+        newContext(final Symbol symbol, final T value) {
         return new Context<V, T>() {
-            public Associable<V, T> get(Symbol s) {
+            public T get(Symbol s) {
                 return symbol.equals(s) ? value : null;
             }
             @Override
@@ -21,14 +20,14 @@ public final class ContextUtils {
         };
     }
     public static <V, T extends Template<V, T>> Context<V, T>
-            put(final Context<V, T> context, final Symbol symbol, final Associable<V, T> value) {
+            put(final Context<V, T> context, final Symbol symbol, final T value) {
         return merge(newContext(symbol, value), context);
     }
     public static <V, T extends Template<V, T>> Context<V, T>
             merge(final Context<V, T> first, final Context<V, T> next) {
         return new Context<V, T>() {
-            public Associable<V, T> get(Symbol s) {
-                Associable<V, T> value = first.get(s);
+            public T get(Symbol s) {
+                T value = first.get(s);
                 if (value != null) {
                     return value;
                 }
@@ -43,7 +42,7 @@ public final class ContextUtils {
     @SuppressWarnings("rawtypes")
     private static Context EMPTY_CONTEXT = 
         new Context() {
-            public Associable get(Symbol name) {
+            public Template get(Symbol name) {
                 return null;
             }
         };

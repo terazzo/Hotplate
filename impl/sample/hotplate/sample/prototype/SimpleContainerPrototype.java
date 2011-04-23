@@ -23,7 +23,7 @@ public class SimpleContainerPrototype
         for (SimpleTemplatePrototype source : elements) {
             tempalteElements.add(source.instantiate(lexicalContext));
         }
-        return new SimpleContainer(lexicalContext, tempalteElements);
+        return new SimpleContainer(tempalteElements);
     }
     @Override
     public SimpleTemplate getAssociable(Context<Object, SimpleTemplate> context) {

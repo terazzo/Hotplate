@@ -12,8 +12,7 @@ import sample.hotplate.core.util.TemplatePairUtils;
 public class SimpleContainer extends AbstractSimpleTemplate implements SimpleTemplate {
     protected final List<SimpleTemplate> elements;
     private final boolean isReducible;
-    public SimpleContainer(Context<Object, SimpleTemplate> lexicalContext, List<SimpleTemplate> elements) {
-        super(lexicalContext);
+    public SimpleContainer(List<SimpleTemplate> elements) {
         this.elements = Collections.unmodifiableList(elements);
         for (SimpleTemplate element : elements) {
             if (element.isReducible()) {
@@ -29,8 +28,7 @@ public class SimpleContainer extends AbstractSimpleTemplate implements SimpleTem
     }
 
     @Override
-    protected TemplatePair<Object, SimpleTemplate> doApply(
-            Context<Object, SimpleTemplate> context) {
+    public TemplatePair<Object, SimpleTemplate> apply(Context<Object, SimpleTemplate> context) {
         if (!isReducible()) {
             return TemplatePairUtils.<Object, SimpleTemplate>pairOf(this);
         }
@@ -43,7 +41,7 @@ public class SimpleContainer extends AbstractSimpleTemplate implements SimpleTem
             newElements.add(applied.template());
             newContext = ContextUtils.merge(applied.context(), newContext);
         }
-        return TemplatePairUtils.pairOf(new SimpleContainer(context, newElements), newContext);
+        return TemplatePairUtils.pairOf(new SimpleContainer(newElements), newContext);
     }
 
     @Override

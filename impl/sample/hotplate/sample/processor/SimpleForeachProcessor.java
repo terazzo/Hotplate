@@ -19,10 +19,12 @@ public class SimpleForeachProcessor extends AbstractSimpleTemplate implements Si
     protected final SimpleSource items;
     protected final Symbol var;
     protected final SimpleTemplate contents;
+    private Context<Object, SimpleTemplate> lexicalContext;
 
     public SimpleForeachProcessor(Context<Object, SimpleTemplate>lexicalContext,
             SimpleSource items, Symbol var, SimpleTemplate contents) {
-        super(lexicalContext);
+        super();
+        this.lexicalContext = lexicalContext;
         this.items = items;
         this.var = var;
         this.contents = contents;
@@ -30,27 +32,30 @@ public class SimpleForeachProcessor extends AbstractSimpleTemplate implements Si
 
     @SuppressWarnings("unchecked")
     @Override
-    public TemplatePair<Object, SimpleTemplate> doApply(Context<Object, SimpleTemplate> context) {
+    public TemplatePair<Object, SimpleTemplate> apply(final Context<Object, SimpleTemplate> context) {
+        Context<Object, SimpleTemplate> merged = ContextUtils.merge(context, lexicalContext);
 
-        Associable<Object, SimpleTemplate> associable = this.items.getAssociable(context);
+        Associable<Object, SimpleTemplate> associable = this.items.getAssociable(merged);
 
-        if (associable != null) {
-            Object value = associable.asValue().value();
-            if (value != null && value instanceof Collection) {
-                ArrayList<SimpleTemplate> elements = new ArrayList<SimpleTemplate>();
-                for (Object item : (Collection<Object>) value) {
-                    Context<Object, SimpleTemplate> innerContents =
-                        ContextUtils.put(context, var, new SimpleValue(item));
-                    SimpleTemplate applies = contents.apply(innerContents).template();
-                    elements.add(applies);
-                }
-                
-                return TemplatePairUtils.<Object, SimpleTemplate>pairOf(
-                        new SimpleContainer(context, elements));
-            }
+        if (associable == null) {
+            return TemplatePairUtils.<Object, SimpleTemplate>pairOf(this);
         }
-        return TemplatePairUtils.<Object, SimpleTemplate>pairOf(
-                new SimpleForeachProcessor(context, items, var, contents));
+
+        Object value = associable.asValue().value();
+        if (value != null && value instanceof Collection) {
+            ArrayList<SimpleTemplate> elements = new ArrayList<SimpleTemplate>();
+            for (Object item : (Collection<Object>) value) {
+                Context<Object, SimpleTemplate> innerContext =
+                    ContextUtils.put(context, var, new SimpleValue(item));
+                SimpleTemplate applies = contents.apply(innerContext).template();
+                elements.add(applies);
+            }
+            
+            return TemplatePairUtils.<Object, SimpleTemplate>pairOf(
+                    new SimpleContainer(elements));
+        } else {
+            throw new IllegalStateException("'items' is not collection");
+        }
     }
 
 

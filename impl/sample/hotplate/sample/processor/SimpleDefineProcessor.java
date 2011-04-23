@@ -15,21 +15,25 @@ public class SimpleDefineProcessor extends AbstractSimpleTemplate implements Sim
 
     protected final Symbol symbol;
     protected final SimpleSource source;
+    private Context<Object, SimpleTemplate> lexicalContext;
 
-    public SimpleDefineProcessor(Context<Object, SimpleTemplate> lexicalScope, Symbol symbol, SimpleSource source) {
-        super(lexicalScope);
+    public SimpleDefineProcessor(Context<Object, SimpleTemplate> lexicalContext, Symbol symbol, SimpleSource source) {
+        super();
+        this.lexicalContext = lexicalContext;
         this.symbol = symbol;
         this.source = source;
     }
     @Override
-    public TemplatePair<Object, SimpleTemplate> doApply(final Context<Object, SimpleTemplate> context) {
-        Associable<Object, SimpleTemplate> value = source.getAssociable(context);
-        if (value != null) {
-            Context<Object, SimpleTemplate> newContext = ContextUtils.newContext(symbol, value);
-            return TemplatePairUtils.pairOf(new SimpleNop(), newContext);
-        } else {
-            return TemplatePairUtils.<Object, SimpleTemplate>pairOf(new SimpleDefineProcessor(context, symbol, source));
+    public TemplatePair<Object, SimpleTemplate> apply(final Context<Object, SimpleTemplate> context) {
+        Context<Object, SimpleTemplate> merged = ContextUtils.merge(context, lexicalContext);
+
+        Associable<Object, SimpleTemplate> value = source.getAssociable(merged);
+        if (value == null) {
+            return TemplatePairUtils.<Object, SimpleTemplate>pairOf(this);
         }
+
+        Context<Object, SimpleTemplate> newContext = ContextUtils.newContext(symbol, value);
+        return TemplatePairUtils.pairOf(new SimpleNop(), newContext);
     }
     @Override
     public boolean isReducible() {

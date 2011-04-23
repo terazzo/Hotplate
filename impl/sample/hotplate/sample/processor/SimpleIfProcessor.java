@@ -3,6 +3,7 @@ package sample.hotplate.sample.processor;
 import sample.hotplate.core.Associable;
 import sample.hotplate.core.Context;
 import sample.hotplate.core.TemplatePair;
+import sample.hotplate.core.util.ContextUtils;
 import sample.hotplate.core.util.TemplatePairUtils;
 import sample.hotplate.sample.AbstractSimpleTemplate;
 import sample.hotplate.sample.SimpleNop;
@@ -13,28 +14,31 @@ public class SimpleIfProcessor extends AbstractSimpleTemplate implements SimpleT
 
     protected final SimpleSource condition;
     protected final SimpleTemplate contents;
+    private Context<Object, SimpleTemplate> lexicalContext;
 
     public SimpleIfProcessor(Context<Object, SimpleTemplate>lexicalContext,
             SimpleSource condition, SimpleTemplate contents) {
-        super(lexicalContext);
+        super();
+        this.lexicalContext = lexicalContext;
         this.condition = condition;
         this.contents = contents;
     }
 
     @Override
-    public TemplatePair<Object, SimpleTemplate> doApply(Context<Object, SimpleTemplate> context) {
-        Associable<Object, SimpleTemplate> associable = this.condition.getAssociable(context);
+    public TemplatePair<Object, SimpleTemplate> apply(final Context<Object, SimpleTemplate> context) {
+        Context<Object, SimpleTemplate> merged = ContextUtils.merge(context, lexicalContext);
+        Associable<Object, SimpleTemplate> associable = this.condition.getAssociable(merged);
 
-        if (associable != null) {
-            Object value = associable.asValue().value();
-            if (value != null && value.equals(true)) {
-                return TemplatePairUtils.pairOf(contents.apply(context).template());
-            } else {
-                return TemplatePairUtils.<Object, SimpleTemplate>pairOf(new SimpleNop());
-            }
+        if (associable == null) {
+            return TemplatePairUtils.<Object, SimpleTemplate>pairOf(this);
         }
-        return TemplatePairUtils.<Object, SimpleTemplate>pairOf(
-                new SimpleIfProcessor(context, condition, contents));
+
+        Object value = associable.asValue().value();
+        if (value != null && value.equals(true)) {
+            return TemplatePairUtils.pairOf(contents.apply(context).template());
+        } else {
+            return TemplatePairUtils.<Object, SimpleTemplate>pairOf(new SimpleNop());
+        }
     }
 
 

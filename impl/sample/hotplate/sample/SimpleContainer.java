@@ -7,7 +7,6 @@ import java.util.List;
 import sample.hotplate.core.Context;
 import sample.hotplate.core.TemplatePair;
 import sample.hotplate.core.util.ContextUtils;
-import sample.hotplate.core.util.TemplatePairUtils;
 
 public class SimpleContainer extends AbstractSimpleTemplate implements SimpleTemplate {
     protected final List<SimpleTemplate> elements;
@@ -30,7 +29,7 @@ public class SimpleContainer extends AbstractSimpleTemplate implements SimpleTem
     @Override
     public TemplatePair<Object, SimpleTemplate> apply(Context<Object, SimpleTemplate> context) {
         if (!isReducible()) {
-            return TemplatePairUtils.<Object, SimpleTemplate>pairOf(this);
+            return TemplatePair.<Object, SimpleTemplate>pairOf(this);
         }
        
         List<SimpleTemplate> newElements = new ArrayList<SimpleTemplate>();
@@ -41,7 +40,7 @@ public class SimpleContainer extends AbstractSimpleTemplate implements SimpleTem
             newElements.add(applied.template());
             newContext = ContextUtils.merge(applied.context(), newContext);
         }
-        return TemplatePairUtils.pairOf(new SimpleContainer(newElements), newContext);
+        return TemplatePair.pairOf(new SimpleContainer(newElements), newContext);
     }
 
     @Override

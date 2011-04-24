@@ -8,7 +8,6 @@ import sample.hotplate.core.Context;
 import sample.hotplate.core.Symbol;
 import sample.hotplate.core.TemplatePair;
 import sample.hotplate.core.util.ContextUtils;
-import sample.hotplate.core.util.TemplatePairUtils;
 import sample.hotplate.sample.AbstractSimpleTemplate;
 import sample.hotplate.sample.SimpleContainer;
 import sample.hotplate.sample.SimpleTemplate;
@@ -38,7 +37,7 @@ public class SimpleForeachProcessor extends AbstractSimpleTemplate implements Si
         Associable<Object, SimpleTemplate> associable = this.items.getAssociable(merged);
 
         if (associable == null) {
-            return TemplatePairUtils.<Object, SimpleTemplate>pairOf(this);
+            return TemplatePair.<Object, SimpleTemplate>pairOf(this);
         }
 
         Object value = associable.asValue().value();
@@ -51,7 +50,7 @@ public class SimpleForeachProcessor extends AbstractSimpleTemplate implements Si
                 elements.add(applies);
             }
             
-            return TemplatePairUtils.<Object, SimpleTemplate>pairOf(
+            return TemplatePair.<Object, SimpleTemplate>pairOf(
                     new SimpleContainer(elements));
         } else {
             throw new IllegalStateException("'items' is not collection");

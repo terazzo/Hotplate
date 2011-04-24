@@ -6,8 +6,8 @@ import sample.hotplate.sample.SimpleTemplate;
 
 public class SimpleLiteralPrototype implements SimpleTemplatePrototype {
     private final String text;
+
     public SimpleLiteralPrototype(String text) {
-        super();
         this.text = text;
     }
     
@@ -15,6 +15,5 @@ public class SimpleLiteralPrototype implements SimpleTemplatePrototype {
     public SimpleTemplate instantiate(Context<Object, SimpleTemplate> lexicalContext) {
         return new SimpleLiteral(text);
     }
-
 
 }

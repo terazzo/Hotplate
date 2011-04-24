@@ -1,7 +1,9 @@
 package sample.hotplate.sample.parser;
 
 
-import static sample.hotplate.sample.parser.ParserFactory.*;
+import static sample.hotplate.sample.parser.ParserFactory.LITERAL_NAME;
+import static sample.hotplate.sample.parser.ParserFactory.endBrace;
+import static sample.hotplate.sample.parser.ParserFactory.startBrace;
 
 import java.util.ArrayList;
 import java.util.List;

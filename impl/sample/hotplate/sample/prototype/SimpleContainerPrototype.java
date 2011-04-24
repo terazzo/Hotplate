@@ -10,7 +10,7 @@ import sample.hotplate.sample.source.SimpleSource;
 
 public class SimpleContainerPrototype
         implements SimpleTemplatePrototype, SimpleSource {
-    protected final List<SimpleTemplatePrototype> elements;
+    private final List<SimpleTemplatePrototype> elements;
 
     public SimpleContainerPrototype(List<SimpleTemplatePrototype> elements) {
         super();

@@ -249,6 +249,131 @@ public class SimpleCompilerTest {
         "</html>";
        assertEquals(expected, output);
    }
+   @Test
+   public void testLayout2() {
+       SimpleTranslator translator = new SimpleTranslator();
+       SimpleTemplate yamadaStyle = translator.toTemplate(
+               "{insert value=message}\n" +
+               "{define name=companyName value=\"'山田商会'\" /}\n" +
+               "{/insert}\n" +
+               "---\n" +
+               "Copyright(c) 山田商会 All Rights Reserved.\n"
+               );
+       SimpleTemplate main = translator.toTemplate(
+               "{insert value=layout}\n" +
+               "{define name=message}\n" +
+               "こんにちは、{insert value=companyName /}のホームページにようこそ！" +
+               "{/define}\n" +
+               "{/insert}\n"
+               );
+       Context<Object, SimpleTemplate> context =
+           new ContextBuilder<Object, SimpleTemplate>()
+           .put(Symbol.of("layout"), yamadaStyle)
+           .context();
+       String output = 
+           translator.fromTemplate(main.apply(context).template());
+       System.out.println("output = " + output);
+   }
+   
+   @Test
+   public void testScope() {
+       SimpleTranslator translator = new SimpleTranslator();
+       SimpleTemplate helloWorld = translator.toTemplate(
+               "Hello, {insert value=yourName /}!"
+           );
+       SimpleTemplate main = translator.toTemplate(
+               "{insert value=helloWold}" +
+               "{define name=yourName value=inputName /}" +
+               "{/insert}"
+           );
+       Context<Object, SimpleTemplate> context =
+           new ContextBuilder<Object, SimpleTemplate>()
+           .put(Symbol.of("helloWold"), helloWorld)
+           .put(Symbol.of("inputName"), translator.toTemplate("板東トン吉"))
+           .context();
+       String output = translator.fromTemplate(main.apply(context).template());
+       System.out.println("output = " + output);
+   }
+   @Test
+   public void testScopeError() {
+       SimpleTranslator translator = new SimpleTranslator();
+       SimpleTemplate helloWorld = translator.toTemplate(
+               "Hello, {insert value=yourName /}!"
+           );
+       SimpleTemplate main = translator.toTemplate(
+               "{insert value=helloWold}" +
+               "{define name=yourName value=inputName /}" +
+               "{/insert}"
+           );
+       Context<Object, SimpleTemplate> context =
+           new ContextBuilder<Object, SimpleTemplate>()
+           .put(Symbol.of("helloWold"), helloWorld)
+           .put(Symbol.of("yourName"), translator.toTemplate("板東トン吉"))
+           .context();
+       try {
+           String output = translator.fromTemplate(main.apply(context).template());
+           System.out.println("output = " + output);
+       } catch (Exception e) {
+           e.printStackTrace();
+           System.err.println(e.getMessage());
+       }
+   }
+   @Test
+   public void testInsertWithTempalte() {
+       SimpleTranslator translator = new SimpleTranslator();
+       SimpleTemplate helloWorld = translator.toTemplate(
+               "{define name=firstName value=\"'花子'\" /}" + 
+               "Hello, {insert value=namePart /}!"
+           );
+       SimpleTemplate main = translator.toTemplate(
+               "{insert value=helloWold}" +
+               "{define name=namePart}" +
+               "{insert value=familyName/} {insert value=firstName/}" +
+               "{/define}" + 
+               "{/insert}"
+           );
+       Context<Object, SimpleTemplate> context =
+           new ContextBuilder<Object, SimpleTemplate>()
+           .put(Symbol.of("familyName"), translator.toTemplate("板東"))
+           .put(Symbol.of("firstName"), translator.toTemplate("トン吉"))
+           .put(Symbol.of("helloWold"), helloWorld)
+           .context();
+       SimpleTemplate applied = main.apply(context).template();
+       String output = translator.fromTemplate(applied);
+       System.out.println("output = " + output);
+   }
+   @Test
+   public void testNestedScopes() {
+       SimpleTranslator translator = new SimpleTranslator();
+       SimpleTemplate templateB = translator.toTemplate(
+               "{insert value=a1}" +
+               "{define name=b1}" +
+               "{insert value=a2/}" +
+               "{/define}" +
+               "{/insert}"
+           );
+       SimpleTemplate templateA = translator.toTemplate(
+               "{insert value=b}" +
+               "{define name=a1}" +
+               "{insert value=b1}" +
+               "{define name=a2}" +
+               "{insert value=firstName/}" +
+               "{/define}" +
+               "{/insert}" +
+               "{/define}" +
+               "{/insert}"
+           );
+       Context<Object, SimpleTemplate> context =
+           new ContextBuilder<Object, SimpleTemplate>()
+           .put(Symbol.of("firstName"), translator.toTemplate("トン吉"))
+           .put(Symbol.of("b"), templateB)
+           .context();
+       SimpleTemplate applied = templateA.apply(context).template();
+       String output = translator.fromTemplate(applied);
+       System.out.println("output = " + output);
+   }
+
+   
    public static class Customer {
        public String firstName;
        public String lastName;

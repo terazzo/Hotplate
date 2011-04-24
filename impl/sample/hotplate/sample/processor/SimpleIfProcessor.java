@@ -4,7 +4,6 @@ import sample.hotplate.core.Associable;
 import sample.hotplate.core.Context;
 import sample.hotplate.core.TemplatePair;
 import sample.hotplate.core.util.ContextUtils;
-import sample.hotplate.core.util.TemplatePairUtils;
 import sample.hotplate.sample.AbstractSimpleTemplate;
 import sample.hotplate.sample.SimpleNop;
 import sample.hotplate.sample.SimpleTemplate;
@@ -30,14 +29,14 @@ public class SimpleIfProcessor extends AbstractSimpleTemplate implements SimpleT
         Associable<Object, SimpleTemplate> associable = this.condition.getAssociable(merged);
 
         if (associable == null) {
-            return TemplatePairUtils.<Object, SimpleTemplate>pairOf(this);
+            return TemplatePair.<Object, SimpleTemplate>pairOf(this);
         }
 
         Object value = associable.asValue().value();
         if (value != null && value.equals(true)) {
-            return TemplatePairUtils.pairOf(contents.apply(context).template());
+            return TemplatePair.pairOf(contents.apply(context).template());
         } else {
-            return TemplatePairUtils.<Object, SimpleTemplate>pairOf(new SimpleNop());
+            return TemplatePair.<Object, SimpleTemplate>pairOf(new SimpleNop());
         }
     }
 

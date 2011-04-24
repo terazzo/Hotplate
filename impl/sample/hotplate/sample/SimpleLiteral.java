@@ -2,7 +2,6 @@ package sample.hotplate.sample;
 
 import sample.hotplate.core.Context;
 import sample.hotplate.core.TemplatePair;
-import sample.hotplate.core.util.TemplatePairUtils;
 
 public class SimpleLiteral extends AbstractSimpleTemplate implements SimpleTemplate {
 
@@ -18,7 +17,7 @@ public class SimpleLiteral extends AbstractSimpleTemplate implements SimpleTempl
         return value;
     }
     public TemplatePair<Object, SimpleTemplate> apply(Context<Object, SimpleTemplate> context) {
-        return TemplatePairUtils.<Object, SimpleTemplate>pairOf(this);
+        return TemplatePair.<Object, SimpleTemplate>pairOf(this);
     }
 
     @Override

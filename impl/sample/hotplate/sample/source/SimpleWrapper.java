@@ -4,7 +4,8 @@ import sample.hotplate.core.Context;
 import sample.hotplate.sample.SimpleTemplate;
 
 public class SimpleWrapper implements SimpleSource {
-    protected final SimpleTemplate content;
+    private final SimpleTemplate content;
+
     public SimpleWrapper(SimpleTemplate content) {
         this.content = content;
     }

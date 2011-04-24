@@ -7,11 +7,11 @@ import java.util.List;
 import sample.hotplate.core.Context;
 import sample.hotplate.core.TemplatePair;
 import sample.hotplate.core.util.ContextUtils;
-import sample.hotplate.core.util.TemplatePairUtils;
 
 public class SimpleContainer implements SimpleTemplate {
-    protected final List<SimpleTemplate> elements;
+    private final List<SimpleTemplate> elements;
     private final boolean isReducible;
+
     public SimpleContainer(List<SimpleTemplate> elements) {
         this.elements = Collections.unmodifiableList(elements);
         for (SimpleTemplate element : elements) {
@@ -30,7 +30,7 @@ public class SimpleContainer implements SimpleTemplate {
     @Override
     public TemplatePair<Object, SimpleTemplate> apply(Context<Object, SimpleTemplate> context) {
         if (!isReducible()) {
-            return TemplatePairUtils.<Object, SimpleTemplate>pairOf(this);
+            return TemplatePair.<Object, SimpleTemplate>pairOf(this);
         }
        
         List<SimpleTemplate> newElements = new ArrayList<SimpleTemplate>();
@@ -41,7 +41,7 @@ public class SimpleContainer implements SimpleTemplate {
             newElements.add(applied.template());
             newContext = ContextUtils.merge(applied.context(), newContext);
         }
-        return TemplatePairUtils.pairOf(new SimpleContainer(newElements), newContext);
+        return TemplatePair.pairOf(new SimpleContainer(newElements), newContext);
     }
 
     @Override

@@ -2,20 +2,15 @@ package sample.hotplate.sample;
 
 import sample.hotplate.core.Context;
 import sample.hotplate.core.TemplatePair;
-import sample.hotplate.core.util.TemplatePairUtils;
 
+/**
+ * âΩÇ‡ÇµÇ»Ç¢TemplateÅB
+ */
 public class SimpleNop implements SimpleTemplate {
-
-    public SimpleNop() {
-        super();
-    }
-
     @Override
     public TemplatePair<Object, SimpleTemplate> apply(Context<Object, SimpleTemplate> context) {
-        return TemplatePairUtils.<Object, SimpleTemplate>pairOf(this);
+        return TemplatePair.<Object, SimpleTemplate>pairOf(this);
     }
-
-
     @Override
     public String getString() {
         return "";

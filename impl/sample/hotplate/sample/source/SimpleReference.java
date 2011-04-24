@@ -5,11 +5,9 @@ import sample.hotplate.core.Symbol;
 import sample.hotplate.sample.SimpleTemplate;
 
 public class SimpleReference implements SimpleSource {
-
-    protected final Symbol symbol;
+    private final Symbol symbol;
 
     public SimpleReference(Symbol symbol) {
-        super();
         this.symbol = symbol;
     }
 

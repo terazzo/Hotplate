@@ -7,15 +7,14 @@ import sample.hotplate.sample.prototype.SimpleTemplatePrototype;
 import sample.hotplate.sample.source.SimpleSource;
 
 public class SimpleDefineProcessorPrototype implements SimpleTemplatePrototype {
-    private Symbol symbol;
-    private SimpleSource source;
+    private final Symbol symbol;
+    private final SimpleSource source;
     public SimpleDefineProcessorPrototype(Symbol symbol, SimpleSource source) {
         super();
         this.symbol = symbol;
         this.source = source;
     }
-    public SimpleTemplate instantiate(
-            Context<Object, SimpleTemplate> lexicalContext) {
+    public SimpleTemplate instantiate(Context<Object, SimpleTemplate> lexicalContext) {
          return new SimpleDefineProcessor(lexicalContext, symbol, source);
     }
 }

@@ -39,10 +39,10 @@ public class SimpleCompilerTest {
         assertEquals("こんにちは、板東トン吉様。", result);
     }
     @Test
-	public void testTonkichi() {
-		SimpleTranslator translator = new SimpleTranslator();
+    public void testTonkichi() {
+        SimpleTranslator translator = new SimpleTranslator();
 
-		SimpleTemplate template = translator.toTemplate("" +
+        SimpleTemplate template = translator.toTemplate("" +
                 "{insert value=aisatsu}" +
                     "{define name=yourname value=customerName /}" +
                 "{/insert}" +
@@ -65,10 +65,10 @@ public class SimpleCompilerTest {
 
         System.out.println("applied = " + applied);
         System.out.println("applied2 = " + applied2);
-		String result = translator.fromTemplate(applied2);
-		System.out.println("result = " + result);
-		assertEquals("こんにちは、板東トン吉様。1月21日にはご来店いただき、\nまことにありがとうございます。", result);
-	}
+        String result = translator.fromTemplate(applied2);
+        System.out.println("result = " + result);
+        assertEquals("こんにちは、板東トン吉様。1月21日にはご来店いただき、\nまことにありがとうございます。", result);
+    }
     @Test
     public void testTonkichi3() {
         SimpleTranslator translator = new SimpleTranslator();
@@ -104,7 +104,7 @@ public class SimpleCompilerTest {
         System.out.println("result = " + result);
         assertEquals("こんにちは、板東トン吉様。1月21日にはご来店いただき、\nまことにありがとうございます。", result);
     }
-	@Test
+    @Test
     public void testByTemplateArgument() {
         SimpleTranslator translator = new SimpleTranslator();
 

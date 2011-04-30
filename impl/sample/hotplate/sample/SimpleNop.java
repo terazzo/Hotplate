@@ -3,18 +3,14 @@ package sample.hotplate.sample;
 import sample.hotplate.core.Context;
 import sample.hotplate.core.TemplatePair;
 
+/**
+ * âΩÇ‡ÇµÇ»Ç¢TemplateÅB
+ */
 public class SimpleNop extends AbstractSimpleTemplate implements SimpleTemplate {
-
-    public SimpleNop() {
-        super();
-    }
-
     @Override
     public TemplatePair<Object, SimpleTemplate> apply(Context<Object, SimpleTemplate> context) {
         return TemplatePair.<Object, SimpleTemplate>pairOf(this);
     }
-
-
     @Override
     public String getString() {
         return "";
@@ -23,5 +19,4 @@ public class SimpleNop extends AbstractSimpleTemplate implements SimpleTemplate 
     public boolean isReducible() {
         return false;
     }
-
 }

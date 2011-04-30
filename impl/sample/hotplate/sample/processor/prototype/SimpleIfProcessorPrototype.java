@@ -14,8 +14,7 @@ public class SimpleIfProcessorPrototype implements SimpleTemplatePrototype {
         this.condition = condition;
         this.contents = contents;
     }
-    public SimpleTemplate instantiate(
-            Context<Object, SimpleTemplate> lexicalContext) {
+    public SimpleTemplate instantiate(Context<Object, SimpleTemplate> lexicalContext) {
          return new SimpleIfProcessor(
                  lexicalContext, condition, 
                  contents.instantiate(lexicalContext));

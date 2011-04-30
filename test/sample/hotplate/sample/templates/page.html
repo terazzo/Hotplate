@@ -1,0 +1,13 @@
+{insert value=layout}
+  {define name=title}アンケートフォーム{/define}
+  {define name=contentBody}
+    ご意見がありましたらどうぞ。
+    <form action="{insert value=actionUrl/}">
+      お名前:<input type="text" name="name"/><br>
+      メッセージ:<br>
+      <textarea name="">
+      </textarea>
+      <input type="submit" value="送信"/><br>
+    </form>
+  {/define}
+{/insert}

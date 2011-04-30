@@ -8,8 +8,7 @@ import sample.hotplate.sample.SimpleContainer;
 import sample.hotplate.sample.SimpleTemplate;
 import sample.hotplate.sample.source.SimpleSource;
 
-public class SimpleContainerPrototype
-        implements SimpleTemplatePrototype, SimpleSource {
+public class SimpleContainerPrototype implements SimpleTemplatePrototype, SimpleSource {
     private final List<SimpleTemplatePrototype> elements;
 
     public SimpleContainerPrototype(List<SimpleTemplatePrototype> elements) {

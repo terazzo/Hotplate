@@ -14,8 +14,7 @@ public class SimpleInsertProcessorPrototype implements SimpleTemplatePrototype {
         this.source = source;
         this.contentPrototype = contentPrototype;
     }
-    public SimpleTemplate instantiate(
-            Context<Object, SimpleTemplate> lexicalContext) {
+    public SimpleTemplate instantiate(Context<Object, SimpleTemplate> lexicalContext) {
          return new SimpleInsertProcessor(
                  lexicalContext, source, 
                  contentPrototype.instantiate(lexicalContext));

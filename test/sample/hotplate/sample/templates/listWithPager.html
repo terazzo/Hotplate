@@ -1,0 +1,24 @@
+Œ‹‰Êˆê——:
+{insert value=pager}
+  {define name=list value=branches/}
+  {define name=baseUrl value="'http://example.com/list.cgi?'"/}
+  {define name=page value=page/}
+  {define name=size value="5"/}
+  {define name=content}
+  {insert value=from/}`{insert value=to/}Œ–Ú‚ğ•\¦
+  <table>
+    <tr>
+        <th>ID</th>
+        <th>x“X–¼</th>
+        <th>“o˜^“ú</th>
+    </tr>
+    {foreach items=displayList var=record}
+    <tr>
+        <td>{insert value="record.id"/}</td>
+        <td>{insert value="record.name"/}</td>
+        <td>{insert value="record.registeredDate"/}</td>
+    </tr>
+    {/foreach}
+  </table>
+  {/define}
+{/insert}

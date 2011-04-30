@@ -9,8 +9,9 @@ import sample.hotplate.core.TemplatePair;
 import sample.hotplate.core.util.ContextUtils;
 
 public class SimpleContainer extends AbstractSimpleTemplate implements SimpleTemplate {
-    protected final List<SimpleTemplate> elements;
+    private final List<SimpleTemplate> elements;
     private final boolean isReducible;
+
     public SimpleContainer(List<SimpleTemplate> elements) {
         this.elements = Collections.unmodifiableList(elements);
         for (SimpleTemplate element : elements) {

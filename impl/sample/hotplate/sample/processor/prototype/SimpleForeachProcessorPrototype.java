@@ -17,14 +17,10 @@ public class SimpleForeachProcessorPrototype implements SimpleTemplatePrototype 
         this.var = var;
         this.contents = contents;
     }
-    public SimpleTemplate instantiate(
-            Context<Object, SimpleTemplate> lexicalContext) {
+    public SimpleTemplate instantiate(Context<Object, SimpleTemplate> lexicalContext) {
          return new SimpleForeachProcessor(
                  lexicalContext, items, var, 
                  contents.instantiate(lexicalContext));
-    }
-    public String toString() {
-        return String.format("{*foreach items=%s var=%s}%s{/*foreach}", items, var, contents);
     }
 }
 

@@ -3,11 +3,12 @@ package sample.hotplate.sample;
 import sample.hotplate.core.Value;
 
 public class SimpleValue implements Value<Object, SimpleTemplate> {
+    private final Object value;
 
-    private Object value;
     public SimpleValue(Object value) {
         this.value = value;
     }
+    @Override
     public Object value() {
         return value;
     }
@@ -23,5 +24,4 @@ public class SimpleValue implements Value<Object, SimpleTemplate> {
     public SimpleTemplate asTemplate() {
         return new SimpleLiteral(value);
     }
-
 }

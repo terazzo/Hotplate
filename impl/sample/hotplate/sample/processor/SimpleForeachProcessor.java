@@ -2,6 +2,7 @@ package sample.hotplate.sample.processor;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 
 import sample.hotplate.core.Associable;
 import sample.hotplate.core.Context;
@@ -15,18 +16,18 @@ import sample.hotplate.sample.SimpleValue;
 import sample.hotplate.sample.source.SimpleSource;
 
 public class SimpleForeachProcessor extends AbstractSimpleTemplate implements SimpleTemplate {
-    protected final SimpleSource items;
-    protected final Symbol var;
-    protected final SimpleTemplate contents;
-    private Context<Object, SimpleTemplate> lexicalContext;
+    private final Context<Object, SimpleTemplate> lexicalContext;
+    private final SimpleSource items;
+    private final Symbol var;
+    private final SimpleTemplate content;
 
     public SimpleForeachProcessor(Context<Object, SimpleTemplate>lexicalContext,
-            SimpleSource items, Symbol var, SimpleTemplate contents) {
+            SimpleSource items, Symbol var, SimpleTemplate content) {
         super();
         this.lexicalContext = lexicalContext;
         this.items = items;
         this.var = var;
-        this.contents = contents;
+        this.content = content;
     }
 
     @SuppressWarnings("unchecked")
@@ -34,27 +35,23 @@ public class SimpleForeachProcessor extends AbstractSimpleTemplate implements Si
     public TemplatePair<Object, SimpleTemplate> apply(final Context<Object, SimpleTemplate> context) {
         Context<Object, SimpleTemplate> merged = ContextUtils.merge(context, lexicalContext);
 
-        Associable<Object, SimpleTemplate> associable = this.items.getAssociable(merged);
+        Associable<Object, SimpleTemplate> itemsAssociable = this.items.getAssociable(merged);
 
-        if (associable == null) {
+        if (itemsAssociable == null) {
             return TemplatePair.<Object, SimpleTemplate>pairOf(this);
         }
 
-        Object value = associable.asValue().value();
-        if (value != null && value instanceof Collection) {
-            ArrayList<SimpleTemplate> elements = new ArrayList<SimpleTemplate>();
-            for (Object item : (Collection<Object>) value) {
-                Context<Object, SimpleTemplate> innerContext =
-                    ContextUtils.put(context, var, new SimpleValue(item));
-                SimpleTemplate applies = contents.apply(innerContext).template();
-                elements.add(applies);
-            }
-            
-            return TemplatePair.<Object, SimpleTemplate>pairOf(
-                    new SimpleContainer(elements));
-        } else {
+        Object itemsValue = itemsAssociable.asValue().value();
+        if (itemsValue == null || !(itemsValue instanceof Collection)) {
             throw new IllegalStateException("'items' is not collection");
         }
+        List<SimpleTemplate> elements = new ArrayList<SimpleTemplate>();
+        for (Object item : (Collection<Object>) itemsValue) {
+            Context<Object, SimpleTemplate> innerContext = ContextUtils.put(context, var, new SimpleValue(item));
+            elements.add(content.apply(innerContext).template());
+        }
+        
+        return TemplatePair.<Object, SimpleTemplate>pairOf(new SimpleContainer(elements));
     }
 
 
@@ -66,9 +63,4 @@ public class SimpleForeachProcessor extends AbstractSimpleTemplate implements Si
     public String getString() {
         throw new IllegalStateException("Unevaluated foreach:" + this);
     }
-    public String toString() {
-        return String.format("{foreach items=%s var=%s}%s{/foreach}", items, var, contents);
-    }
-
-
 }

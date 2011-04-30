@@ -13,43 +13,38 @@ import sample.hotplate.sample.SimpleTemplate;
 import sample.hotplate.sample.SimpleValue;
 
 public class SimpleExpression implements SimpleSource {
+    private final String expression;
 
-    private String expression;
     public SimpleExpression(String expression) {
         this.expression = expression;
     }
-    public boolean isReducible() {
-        return true;
-    }
+
     @SuppressWarnings("unchecked")
     @Override
     public Associable<Object, SimpleTemplate> getAssociable(Context<Object, SimpleTemplate> context) {
         try {
             Object value = evaluate(context);
-            if (!(value instanceof SimpleTemplate)) {
+            if (!(value instanceof Associable)) {
                 value = new SimpleValue(value);
             }
-            return (Associable<Object, SimpleTemplate>) value;
+            return Associable.class.cast(value);
         } catch (PropertyAccessException e) {
-            e.printStackTrace();
             return null;
         }
     }
     private Object evaluate(Context<Object, SimpleTemplate> context) {
-        return MVEL.eval(expression, new VariableResolverFactory(context));
+        return MVEL.eval(expression, new HotplateVariableResolverFactory(context));
     }
 
     
     
-    public static class VariableResolverFactory extends BaseVariableResolverFactory {
+    public static class HotplateVariableResolverFactory extends BaseVariableResolverFactory {
         private static final long serialVersionUID = 1L;
         private Context<Object, SimpleTemplate> context;
 
-        public VariableResolverFactory(Context<Object, SimpleTemplate> context) {
+        public HotplateVariableResolverFactory(Context<Object, SimpleTemplate> context) {
             this.context = context;
         }
-
-
         @Override
         public VariableResolver getVariableResolver(String name) {
             Associable<Object, SimpleTemplate> value = context.get(Symbol.of(name));
@@ -63,24 +58,19 @@ public class SimpleExpression implements SimpleSource {
         public boolean isTarget(String name) {
             return context.get(Symbol.of(name)) != null;
         }
-
         @Override
         public boolean isResolveable(String name) {
             return context.get(Symbol.of(name)) != null;
         }
-
         @Override
         public VariableResolver createVariable(String name, Object value) {
             throw new IllegalStateException();
         }
-
         @Override
         public VariableResolver createVariable(String name, Object value,
                 Class<?> type) {
             throw new IllegalStateException();
         }
-
-        
     }
 
 }

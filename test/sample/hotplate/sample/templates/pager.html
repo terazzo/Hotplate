@@ -1,0 +1,32 @@
+{define name=listSize value="list.size()"/}
+{define name=maxpage value="listSize/size"/}
+{define name=paging}
+<!-- ページ送り用のリンクを表示 -->
+<div>
+| {foreach items="[0,1,2,3,4,5,6,7,8,9]" var=p}
+  {if condition="p<maxpage"}
+    {if condition="p==page"}
+      {insert value=p/}
+    {/if}
+    {if condition="p!=page"}
+      <a href="{insert value="baseUrl + 'page=' + p"/}">{insert value=p/}</a>
+    {/if}
+     | 
+  {/if}
+{/foreach}
+</div>
+{/define}
+<!-- ページ送り用のリンクを表示(上部) -->
+{insert value=paging/}
+
+<!-- 現在の表示ページ -->
+{define name=from value="Math.min(listSize, size*page)"/}
+{define name=to value="Math.min(listSize, size*(1+page))"/}
+{insert value=content}
+  {define name=from value="from + 1"/}
+  {define name=to value="to"/}
+  {define name=displayList value="list.subList(from, to)"/}
+{/insert}
+
+<!-- ページ送り用のリンクを表示(上部) -->
+{insert value=paging/}

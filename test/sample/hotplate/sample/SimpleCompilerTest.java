@@ -405,9 +405,9 @@ public class SimpleCompilerTest {
    @Test
    public void testForeach() {
        List<Customer> customers = new ArrayList<Customer>();
-       customers.add(new Customer(){{firstName="hoge";}});
-       customers.add(new Customer(){{firstName="fuga";}});
-       customers.add(new Customer(){{firstName="hige";}});
+       customers.add(new Customer(){{firstName="Boo";}});
+       customers.add(new Customer(){{firstName="Hoo";}});
+       customers.add(new Customer(){{firstName="Woo";}});
        
        Context<Object, SimpleTemplate> context =
            new ContextBuilder<Object, SimpleTemplate>()
@@ -423,7 +423,7 @@ public class SimpleCompilerTest {
        String output = 
            translator.fromTemplate(template.apply(context).template());
        System.out.println(output);
-       String expected = "hoge、fuga、hige、";
+       String expected = "Boo、Hoo、Woo、";
        assertEquals(expected, output);
    }
    @Test
